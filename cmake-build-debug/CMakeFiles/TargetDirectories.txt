@@ -1,0 +1,3 @@
+/Users/ikhan/CLionProjects/check_bijecticty/cmake-build-debug/CMakeFiles/check_bijecticty.dir
+/Users/ikhan/CLionProjects/check_bijecticty/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/ikhan/CLionProjects/check_bijecticty/cmake-build-debug/CMakeFiles/rebuild_cache.dir
