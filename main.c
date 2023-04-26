@@ -16,51 +16,14 @@ int** generateSboxMatrix(int rows, int cols);
 int** generate_WHM(int k);
 void free_2D_array(int** array_2D, int array_2D_length);
 int* calculate_x_v(int* A, int n);
+int calculate_F_D_j(int *x_k_j, int n, int cols);
 
 int main() {
     int **ptr_sbox_matrix = allocate_2D_matrix(i, j);
     ptr_sbox_matrix = generateSboxMatrix(i, j);
 
-    // Print the generated matrix
-    printf("Generated Matrix:\n");
-    for (int rows = 0; rows < i; rows++) {
-        for (int cols = 0; cols < j; cols++) {
-//            printf("%d",  ptr_sbox_matrix[rows][cols]);
-        }
-//        printf("\n");
-    }
-
-    //j = 0
-    //v_0_0 = a_0_0 * 2^0
-    //v_1_0 = a_1_0 * 2^0
-    //...
-    //v_254_0 = a_254_0 * 2_0
-    //v_255_0 = a_255_0 * 2_0
-
-    //j = 1
-    //v_0_1 = (a_0_1 * 2^1) + (a_0_0 + 2^0)
-    //v_1_1 = (a_1_1 * 2^1) + (a_1_0 + 2^0)
-    //...
-    //v_254_1 = (a_254_1 * 2^1) + (a_254_0 * 2^0)
-    //v_255_1 = (a_255_1 * 2^1) + (a_255_0 * 2^0)
-
-    //j = 2
-    //v_0_1 = (a_0_2 * 2^2) + (a_0_1 * 2^1) + (a_0_0 + 2^0 )
-    //v_1_1 = (a_1_2 * 2^2) + (a_1_1 * 2^1) + (a_1_0 + 2^0 )
-    //...
-    //v_254_1 = (a_254_1 * 2^2) + (a_254_0 * 2^1) + (a_254 * 2^0)
-    //v_255_1 = (a_255_1 * 2^2) + (a_255_0 * 2^1) + (a_255 * 2^0)
-
-    //...
-    //j = 7
-    //v_0_7 = (a_0_7 * 2^7) + (a_0_6 * 2^6) + (a_0_5 + 2^5) + (a_0_4 + 2^4) + (a_0_3 + 2^3) + (a_0_2 + 2^2) + (a_0_1 + 2^1) + (a_0_0 + 2^0)
-    //v_1_7 = (a_1_7 * 2^7) + (a_1_6 * 2^6) + (a_1_5 + 2^5) + (a_1_4 + 2^4) + (a_1_3 + 2^3) + (a_1_2 + 2^2) + (a_1_1 + 2^1) + (a_1_0 + 2^0)
-
-    //...
-    //v_254_7 = (a_254_7 * 2^7) + (a_254_6 * 2^6) + (a_254_5 + 2^5) + (a_254_4 + 2^4) + (a_254_3 + 2^3) + (a_254_2 + 2^2) + (a_254_1 + 2^1) + (a_254_0 + 2^0)
-    //v_255_7 = (a_255_7 * 2^7) + (a_255_6 * 2^6) + (a_255_5 + 2^5) + (a_255_4 + 2^4) + (a_255_3 + 2^3) + (a_255_2 + 2^2) + (a_255_1 + 2^1) + (a_255_0 + 2^0)
-
     int offset = 0;
+    //CALCULATING v_i_j
     v_i_j = allocate_2D_matrix(i, j);
     for (int rows = 0; rows < i; rows++) {
         offset = 1;
@@ -72,15 +35,16 @@ int main() {
         }
     }
 
-    //PRINTING THE v_i_j
+    //PRINTING THE v_i_j(j)
     for (int cols = 1; cols < j; cols++) {
         for (int rows = 0; rows < i; rows++) {
             v_i_j[rows][cols] = v_i_j[rows][cols] + v_i_j[rows][cols - 1];
         }
     }
 
-    int *temp = (int *) malloc(j * sizeof(int));
-    int *x_v = (int *) malloc(i * sizeof(int));
+    int* temp = (int*) malloc(j * sizeof(int));
+    int* x_v = (int*) malloc(i * sizeof(int));
+    int* F_D_j = (int*) malloc(j * sizeof(int));
 
     for (int cols = 0; cols < j; cols++) {
         printf("j = %d\n", cols);
@@ -89,14 +53,18 @@ int main() {
         }
 
         int sum = 0;
-
-       x_v = calculate_x_v(temp, i);
+        //CALCULATING #x_v(j)
+        x_v = calculate_x_v(temp, i);
         for (int index = 0; index < i; index++) {
-            printf("x_v[%d] = %d\n", index, x_v[index]);
-            sum = x_v[index] + sum;
+            //printf("x_v[%d] = %d\n", index, x_v[index]);
+            //sum = x_v[index] + sum;
         }
-        printf("%d\n", sum);
-        printf("\n");
+            //printf("%d\n", sum);
+            //printf("\n");
+
+        //CALCULATING F(D(J))
+        F_D_j[cols] = calculate_F_D_j(x_v, j, cols);
+//        printf("F_D_j[%d] = %d\n", cols, F_D_j[cols]);
     }
 
     free_2D_array(ptr_sbox_matrix, i);
@@ -132,9 +100,9 @@ int** generateSboxMatrix(int row, int col){
     }
 
     // Generate binary values for the matrix
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            matrix[i][j] = generateBinaryValue();
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            matrix[row][col] = generateBinaryValue();
         }
     }
     return matrix;
@@ -162,7 +130,6 @@ int** generate_WHM(int k) {
             }
         }
     }
-
     return hadamard;
 }
 
@@ -201,4 +168,24 @@ int* calculate_x_v(int* A, int n){
         }
     }
     return x_v;
+}
+
+int calculate_F_D_j(int *x_k_j, int n, int cols){
+    int F_D_j = 0;
+    int sum = 0;
+    int temp;
+//        printf("j = %d\n", cols );
+        for(int k = 0; k < (2 << (cols + 1) - 1); k++){
+            printf("2^%d - 1 - %d = %d\n", n, cols, 1 << (n - 1 - cols));
+            printf("#x_k_j[%d]) = %d\n", k, x_k_j[k]);
+            temp = abs(x_k_j[k]  - (1 << (n-1-cols)));
+            sum = temp + sum;
+            F_D_j = -sum;
+            printf("F_D_j = %d\n", temp);
+//            printf("\n");
+        }
+        printf("F_D_j[%d] = %d\n",cols,  F_D_j);
+        printf("\n");
+
+    return F_D_j;
 }

@@ -20,15 +20,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Initial commit">
+    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Calculate #Xv(j)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-5d30b8ea22e2a170abe7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2023-04-15T06-57-13-0226.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/check_bijecticty.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/check_bijecticty.dir/main.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/check_bijecticty" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/check_bijecticty" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
@@ -92,7 +89,8 @@
       <workItem from="1681794427237" duration="1035000" />
       <workItem from="1681798788849" duration="9736000" />
       <workItem from="1682331006662" duration="9699000" />
-      <workItem from="1682408218972" duration="12281000" />
+      <workItem from="1682408218972" duration="15711000" />
+      <workItem from="1682500970614" duration="7312000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1681708479928</created>
@@ -101,7 +99,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681708479928</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Calculate #Xv(j)">
+      <created>1682425474287</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1682425474287</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -120,6 +125,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
+    <MESSAGE value="Calculate #Xv(j)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Calculate #Xv(j)" />
   </component>
 </project>
