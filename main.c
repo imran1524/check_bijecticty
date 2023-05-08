@@ -13,11 +13,11 @@ int generateBinaryValue() {
 int**v_i_j;
 int** allocate_2D_matrix(int rows, int cols);
 int** generateSboxMatrix(int rows, int cols);
-int** generate_WHM(int k);
 void free_2D_array(int** array_2D, int array_2D_length);
 int* calculate_x_v(int* A, int n);
 int calculate_F_D_j(int *x_k_j, int n, int cols);
-
+int** generate_WHM(int order);
+//Function definition of generating Walsh Hadamard Matrix of order k
 int main() {
     int **ptr_sbox_matrix = allocate_2D_matrix(i, j);
     ptr_sbox_matrix = generateSboxMatrix(i, j);
@@ -34,7 +34,6 @@ int main() {
             offset++;
         }
     }
-
     //PRINTING THE v_i_j(j)
     for (int cols = 1; cols < j; cols++) {
         for (int rows = 0; rows < i; rows++) {
@@ -50,29 +49,41 @@ int main() {
         printf("j = %d\n", cols);
         for (int rows = 0; rows < i; rows++) {
             temp[rows] = v_i_j[rows][cols];
+            printf("v_j[%d] = %d\n",rows, temp[rows]);
         }
+
+        printf("2^%d-1-%d = %d\n", 8, cols, 1 << (8-1-cols));
 
         int sum = 0;
         //CALCULATING #x_v(j)
         x_v = calculate_x_v(temp, i);
         for (int index = 0; index < i; index++) {
-            //printf("x_v[%d] = %d\n", index, x_v[index]);
-            //sum = x_v[index] + sum;
+            printf("x_v[%d] = %d\n", index, x_v[index]);
+            sum = x_v[index] + sum;
         }
-            //printf("%d\n", sum);
-            //printf("\n");
+//            printf("%d\n", sum);
+            printf("\n");
 
         //CALCULATING F(D(J))
         F_D_j[cols] = calculate_F_D_j(x_v, j, cols);
 //        printf("F_D_j[%d] = %d\n", cols, F_D_j[cols]);
     }
 
+    int** WH = allocate_2D_matrix(j,j);
+    WH = generate_WHM(4);
+    for(int row = 0; row < (1 << 3); row++){
+        for(int col = 0; col < (1 << 3); col++){
+//            printf("%d \n", WH[row][col]);
+        }
+    }
+
     free_2D_array(ptr_sbox_matrix, i);
     free_2D_array(v_i_j, i);
     free(temp);
     free(x_v);
+    free_2D_array(WH, j);
     return 0;
-} //END
+} //END OF MAIN FUNCTION
 
 //-----------------------------------------------------------------------------------------------------------
 //DECLARATION OF FUNCTIONS
@@ -109,29 +120,6 @@ int** generateSboxMatrix(int row, int col){
 }
 //CALCULATE WALSH HADAMARD MATRIX
 //Function definition of generating Walsh Hadamard Matrix of order k
-int** generate_WHM(int k) {
-//    int **hadamard = memory_allocation_for_2D_array(GENE_SIZE, GENE_SIZE);
-    int rows;
-    int cols;
-    int** hadamard = (int**) malloc(rows * sizeof(int*));
-    for(int index = 0; index < rows; index++){
-        hadamard[index] = (int*)malloc(cols * sizeof(int));
-    }
-
-    hadamard[0][0] = 1;
-    for (int k = 1; k < 256; k += k) {
-        // Loop to copy elements to
-        // other quarters of the matrix
-        for (int i = 0; i < k; i++) {
-            for (int j = 0; j < k; j++) {
-                hadamard[i + k][j] = hadamard[i][j];
-                hadamard[i][j + k] = hadamard[i][j];
-                hadamard[i + k][j + k] = -hadamard[i][j];
-            }
-        }
-    }
-    return hadamard;
-}
 
 //FREE UP 2D-ARRAY
 void free_2D_array(int** array_2D, int array_2D_length){
@@ -176,16 +164,48 @@ int calculate_F_D_j(int *x_k_j, int n, int cols){
     int temp;
 //        printf("j = %d\n", cols );
         for(int k = 0; k < (2 << (cols + 1) - 1); k++){
-            printf("2^%d - 1 - %d = %d\n", n, cols, 1 << (n - 1 - cols));
-            printf("#x_k_j[%d]) = %d\n", k, x_k_j[k]);
+//            printf("#x_k_j[%d]) = %d\n", k, x_k_j[k]);
+//            printf("2^%d - 1 - %d = %d\n", n, cols, 1 << (n - 1 - cols));
             temp = abs(x_k_j[k]  - (1 << (n-1-cols)));
             sum = temp + sum;
             F_D_j = -sum;
-            printf("F_D_j = %d\n", temp);
+//            printf("F_D_j[%d] = %d\n", k,temp);
 //            printf("\n");
         }
-        printf("F_D_j[%d] = %d\n",cols,  F_D_j);
-        printf("\n");
-
+//        printf("F((D(%d) = %d\n",cols,  F_D_j);
+//        printf("\n");
     return F_D_j;
+}
+
+int** generate_WHM(int order){
+    int n = 1 << order;
+
+    int** hadamard = (int**) malloc(n * sizeof(int*));
+    for (int row = 0; row < n; row++){
+        hadamard[row] = (int*) malloc(n * sizeof(int));
+    }
+
+    hadamard[0][0] = 1;
+
+    // Loop to copy elements to other quarters of the matrix
+    for(int k = 1; k < n; k += k){
+
+        for(int i = 0; i < k; i++){
+            for(int j = 0; j < k; j++){
+                hadamard[i+k][j] = hadamard[i][j];
+                hadamard[i][j+k] = hadamard[i][j];
+                hadamard[i+k][j+k] = -hadamard[i][j];
+            }
+        }
+    }
+
+    //Displaying final hadamard matrix
+    for(int i = 0; i < n;i++){
+        for(int j = 0; j < n; j++){
+//            printf("%d ", hadamard[i][j]);
+        }
+//        printf("\n");
+    }
+
+    return hadamard;
 }
