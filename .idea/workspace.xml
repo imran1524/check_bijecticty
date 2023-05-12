@@ -20,7 +20,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Printing v_i_j">
+    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Calculating W">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
@@ -95,7 +95,7 @@
       <workItem from="1682528286625" duration="7953000" />
       <workItem from="1683003533158" duration="645000" />
       <workItem from="1683531546335" duration="3240000" />
-      <workItem from="1683608315264" duration="17135000" />
+      <workItem from="1683608315264" duration="45393000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1681708479928</created>
@@ -125,7 +125,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683534790832</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Calculating W">
+      <created>1683705432595</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1683705432595</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,6 +154,7 @@
     <MESSAGE value="Calculate #Xv(j)" />
     <MESSAGE value="Calculation of bijectivity fitness function F(D(j))" />
     <MESSAGE value="Printing v_i_j" />
-    <option name="LAST_COMMIT_MESSAGE" value="Printing v_i_j" />
+    <MESSAGE value="Calculating W" />
+    <option name="LAST_COMMIT_MESSAGE" value="Calculating W" />
   </component>
 </project>
