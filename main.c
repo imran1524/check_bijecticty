@@ -86,7 +86,7 @@ int main() {
             //D[row][col] = f_j[row][col];
             f[row] = f_j[row][col];
 
-            printf("f_j[%d][%d] = %d\n", row, col, f_j[row][col]);
+            //printf("f_j[%d][%d] = %d\n", row, col, f_j[row][col]);
             //printf("f[%d] = %d\n", row, f[row]);
         }
         //APPLYING WALSH HADAMARD MATRIX ON f_j TO CALCULATE WALSH HADAMARD SPECTRUM OF f_j
@@ -135,18 +135,17 @@ int main() {
     for (int col = 1; col < j; col++) {
         for (int rows = 0; rows < i; rows++) {
             v_i_j[rows][col] = v_i_j[rows][col] + v_i_j[rows][col - 1];
-            //printf("v_i_j[%d][%d] = %d\n", rows, cols, v_i_j[rows][cols]);
+            //printf("v_i_j[%d][%d] = %d\n", rows, col, v_i_j[rows][col]);
         }
     }
 
-    printf("D = \n");
+    //printf("D = \n");
     for(int row = 0; row < i; row++){
         for(int col = 0; col < j; col++){
-            printf("%d ", D[row][col]);
+            //printf("%d ", D[row][col]);
         }
-        printf("\n");
+        //printf("\n");
     }
-
 
     //CALCULATION OF #X_v(j) AND BIJECTIVE FITNESS FUNCTION, F(D(j)
     for(int col = 0; col < j; col++) {
@@ -163,7 +162,7 @@ int main() {
         int index_v = 0;
         int v = 1 << (col + 1);
         for (int index = 0; index < v; index++) {
-            //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
+            printf("#{X_v[%d]} = %d\n", index, X_v[index]);
             //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
             if (X_v[index] > (1 << (n - 1 - col))) {
                 V[index_v++] = index;
@@ -174,13 +173,11 @@ int main() {
             sum = X_v[index] + sum;
         }
 
-
-
         //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j))
         F_D_j[col] = calculate_F_D_j(X_v, j, col);
-        //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
+        printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
         //printf("\n");
-
+#if 0
     //STEP 5: Set a=V(m),here V(m)is the m-th element in V int a;
         int a;
         printf("index_v = %d\n", index_v);
@@ -190,18 +187,15 @@ int main() {
             for(col = 0; col < j; col++){
                 for(int row = 0; row < i; row++){
                     if(a == v_i_j[row][col]){
-                        printf("f_j[%d][%d] = %d\n", row, col, f_j[row][col]);
+                        //printf("f_j[%d][%d] = %d\n", row, col, f_j[row][col]);
                         D[row][col] = complement_f_j_i(f_j[row][col]);
-                        printf("D[%d][%d] = %d\n", row, col, D[row][col]);
-                        printf("\n");
+                        //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
+                        //printf("\n");
                     }
                 }
             }
-            printf("V[%d] = %d\n", m, V[m]);
+            //printf("V[%d] = %d\n", m, V[m]);
         }
-
-
-
 
 //            for (int m = 0; m < index_v; m++) {
 //                printf("m = %d\n", m);
@@ -363,7 +357,10 @@ int main() {
             for (int index = 0; index < W_j_2_3_minus.array_size; index++) {
                 //        printf("W_j_2_3_minus[%d] = %d\n", index, W_j_2_3_minus.array[index]);
             }
+
+
         }
+#endif
         printf("\n");
     }
 
@@ -501,7 +498,7 @@ int calculate_F_D_j(int *x_k_j, int n, int cols){
             temp = abs(x_k_j[k]  - (1 << (n-1-cols)));
             sum = temp + sum;
             F_D_j = -sum;
-//            printf("F_D_j[%d] = %d\n", k,temp);
+            printf("F_D_j[%d] = %d\n", k,temp);
 //            printf("\n");
         }
 //        printf("F((D(%d) = %d\n",cols,  F_D_j);
