@@ -20,8 +20,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Refactor code to calcute V for col = 0, 1, 2, ... n-1">
+    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Calculation of V for each column">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/check_bijecticty.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/check_bijecticty.dir/main.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/check_bijecticty" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/check_bijecticty" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,6 +96,7 @@
       <workItem from="1683003533158" duration="645000" />
       <workItem from="1683531546335" duration="3240000" />
       <workItem from="1683608315264" duration="68427000" />
+      <workItem from="1684385858695" duration="7133000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1681708479928</created>
@@ -154,7 +161,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684323331976</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Calculation of V for each column">
+      <created>1684386932186</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1684386932186</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,6 +194,7 @@
     <MESSAGE value="Add function for complement binary bits" />
     <MESSAGE value="Printing #{X_v[j]} and F_D_j[j]" />
     <MESSAGE value="Refactor code to calcute V for col = 0, 1, 2, ... n-1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor code to calcute V for col = 0, 1, 2, ... n-1" />
+    <MESSAGE value="Calculation of V for each column" />
+    <option name="LAST_COMMIT_MESSAGE" value="Calculation of V for each column" />
   </component>
 </project>
