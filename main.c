@@ -109,30 +109,20 @@ int main() {
         //CALCULATING OF #x_v(j)
         //X_v CALCULATES REPETITION OF THE VALUE v IN SUB-MATRIX D(j) FOR j = 0, 1, 2, ... , n-1
         X_v = calculate_X_v(v_j, i);
-        int index_v = 0;
-        int v = 1 << (col + 1) - 1;
-        for (int index = 0; index <= v; index++) {
-            //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
-            //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
-            if (X_v[index] > (1 << (n - 1 - col))) {
-                V[index_v++] = index;
-                //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
-                //printf("v = %d\n", index);
-            }
-            //printf("\n");
-            //sum = X_v[index] + sum;
-        }
-        //printf("index_v = %d\n", index_v);
+
         //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j))
         F_D_j[col] = calculate_F_D_j(X_v, j, col);
         //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
         //printf("\n");
 
-        v = (1 << (col + 1)) - 1;
+        //CALCULATION OF V
+        int v = (1 << (col + 1)) - 1;
         printf("v = %d\n", v);
+        int index_v = 0;
         for (int index = 0; index <= v; index++) {
             //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
             //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
+
             if (X_v[index] > (1 << (n - 1 - col))) {
                 V[index_v++] = index;
                 //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
@@ -142,7 +132,8 @@ int main() {
             //sum = X_v[index] + sum;
         }
 
-        for(int index = 0; index < index_v; index++) {
+        //printf("index_v = %d\n");
+        for (int index = 0; index < index_v; index++) {
             printf("V[%d] = %d\n", index, V[index]);
         }
 
@@ -171,32 +162,8 @@ int main() {
         printf("\n");
     }
 
-    //CALCULATION OF #X_v(j) AND BIJECTIVE FITNESS FUNCTION, F(D(j)
-    for (int col = 0; col < j; col++) {
-//        v_i_j = calculate_v_i_j(D, i, col);
-//        //printf("j = %d\n", col);
-//        int sum = 0;
-//        for (int row = 0; row < i; row++) {
-//            v_j[row] = v_i_j[row][col];
-//            //printf("v_j[%d] = %d\n", row, v_j[row]);
-//        }
 #if 0
-        //CALCULATING OF #x_v(j)
-        //X_v CALCULATES REPETITION OF THE VALUE v IN SUB-MATRIX D(j) FOR j = 0, 1, 2, ... , n-1
-        X_v = calculate_X_v(v_j, i);
-        int index_v = 0;
-        int v = 1 << (col + 1) - 1;
-        for (int index = 0; index <= v; index++) {
-            //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
-            //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
-            if (X_v[index] > (1 << (n - 1 - col))) {
-                V[index_v++] = index;
-                //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
-                //printf("v = %d\n", index);
-            }
-            //printf("\n");
-            //sum = X_v[index] + sum;
-        }
+    {
         //printf("index_v = %d\n", index_v);
         //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j))
         F_D_j[col] = calculate_F_D_j(X_v, j, col);
@@ -482,7 +449,7 @@ int main() {
 
     return 0;
 } //END OF MAIN FUNCTION
-}
+
 //######################################################################################################################
 //DECLARATION OF FUNCTIONS
 

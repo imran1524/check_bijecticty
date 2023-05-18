@@ -20,14 +20,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Printing #{X_v[j]} and F_D_j[j]">
+    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Refactor code to calcute V for col = 0, 1, 2, ... n-1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/check_bijecticty.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/check_bijecticty.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/check_bijecticty" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/check_bijecticty" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +140,21 @@
       <option name="project" value="LOCAL" />
       <updated>1684216299475</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Refactor code to calcute V for col = 0, 1, 2, ... n-1">
+      <created>1684323315393</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1684323315393</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Refactor code to calcute V for col = 0, 1, 2, ... n-1">
+      <created>1684323331976</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1684323331976</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,6 +179,7 @@
     <MESSAGE value="Calculating W" />
     <MESSAGE value="Add function for complement binary bits" />
     <MESSAGE value="Printing #{X_v[j]} and F_D_j[j]" />
-    <option name="LAST_COMMIT_MESSAGE" value="Printing #{X_v[j]} and F_D_j[j]" />
+    <MESSAGE value="Refactor code to calcute V for col = 0, 1, 2, ... n-1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor code to calcute V for col = 0, 1, 2, ... n-1" />
   </component>
 </project>
