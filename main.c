@@ -54,6 +54,7 @@ int complement_f_j_i(int f_j_i);
 void print_Sbox(int **S_box, int row_number, int col_number);
 int** calculate_v_i_j(int** S_box, int row_number, int col_number);
 int calculate_L_omega (int i_value, int omega);
+struct array_object calculate_V(int* X_v, int col_number);
 
 int main() {
     i = 1 << n;
@@ -71,10 +72,10 @@ int main() {
     int *F_D_j = (int *) malloc(j * sizeof(int));
     int *f = (int *) malloc(i * sizeof(int));
     int *F_omega = (int *) malloc(16 * sizeof(int));
-    int *V = (int *) malloc(j + sizeof(int));
     int WH_max;
     int *updated_D = (int *) malloc(j * sizeof(int));
     int L_omega;
+    struct array_object V;
 
 
     //GENERATING WALSH HADAMARD MATRIX OF ORDER j
@@ -121,30 +122,16 @@ int main() {
         //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
         //printf("\n");
 
-        //CALCULATION OF V
-        //STEP # 1: FOR D(j) construct a set V = {v = v| v ∈ {0, 1, 2, 3, ..., 2^(j+1)-1} if #{X_v(j) > 2^n-1-j}
-        int v = (1 << (col + 1)) - 1;
-        //printf("v = %d\n", v);
-        int index_V = 0;
-        for (int index = 0; index <= v; index++) {
-            //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
-            //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
-            if (X_v[index] > (1 << (n - 1 - col))) {
-                V[index_V++] = index;
-                //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
-                //printf("v = %d\n", index);
-            }
-            //printf("\n");
-            //sum = X_v[index] + sum;
-        }
+
+        V = calculate_V(X_v, col);
 
         //printf("index_V = %d\n");
-        for (int index = 0; index < index_V; index++) {
+        for (int index = 0; index < V.array_size; index++) {
             //printf("V[%d] = %d\n", index, V[index]);
         }
 
         //STEP # 2: IF V IS ∅, OUTPUT D(j), OTHERWISE GO TO STEP # 3
-        if (index_V == 0) {
+        if (V.array_size == 0) {
             printf("D(%d) is bijective\n", col);
             for (int row = 0; row < i; row++) {
                 printf("D[%d][%d] = %d\n", row, col, D[row][col]);
@@ -266,9 +253,9 @@ int main() {
             int a;
             // printf("index_v = %d\n", index_v);
             //STEP 4: Set m = 1
-            for (int m = 0; m < index_V; m++) {
+            for (int m = 0; m < V.array_size; m++) {
                 //STEP 5: Set a=V(m),here V(m)is the m-th element in V int a;
-                a = V[m];
+                a = V.array[m];
                 int is_condition_1_satisfied = 0;
                 int is_condition_2_satisfied = 0;
                 //printf("a = %d\n", a);
@@ -361,12 +348,14 @@ int main() {
                         }
                         //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
                         //printf("\n");
+
+                        break;
+                    }else{
+                        //STEP 7
                     }
 
                 }//END OF FOR LOOP of row CHECKING WHICH ROW IS EQUAL TO a
             }//END OF FOR LOOP OF m
-
-
 
             //CALCULATION OF v_i_j USING FUNCTION
             v_i_j = calculate_v_i_j(D, i, col);
@@ -407,8 +396,8 @@ int main() {
     free(F_D_j);
     F_D_j = NULL;
 
-    free(V);
-    V = NULL;
+    free(V.array);
+    V.array = NULL;
 
     free(W_plus_j_1.array);
     W_plus_j_1.array = NULL;
@@ -853,4 +842,29 @@ int calculate_L_omega (int i_value, int omega){
     }
 
     return L_omega;
+}
+
+struct array_object calculate_V(int* X_v, int col_number){
+    //CALCULATION OF V
+    struct array_object V;
+    V.array = (int*)malloc(i * sizeof(int));
+    V.array_size = 0;
+
+    //STEP # 1: FOR D(j) construct a set V = {v = v| v ∈ {0, 1, 2, 3, ..., 2^(j+1)-1} if #{X_v(j) > 2^n-1-j}
+    int v = (1 << (col_number + 1)) - 1;
+    //printf("v = %d\n", v);
+    int index_V = 0;
+    for (int index = 0; index <= v; index++) {
+        //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
+        //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
+        if (X_v[index] > (1 << (n - 1 - col_number))) {
+            V.array[index_V++] = index;
+            //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
+            //printf("v = %d\n", index);
+            V.array_size = index_V;
+        }
+        //printf("\n");
+        //sum = X_v[index] + sum;
+    }
+    return V;
 }

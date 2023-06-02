@@ -20,15 +20,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Updated calculation of W^+_j_1, W^-_j_2,W^+_j_3, W^-_j_3">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/check_bijecticty.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/check_bijecticty.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/check_bijecticty" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/check_bijecticty" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-    </list>
+    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Refactor code to calculate V in a function" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,7 +90,7 @@
       <workItem from="1683608315264" duration="68427000" />
       <workItem from="1684385858695" duration="7133000" />
       <workItem from="1685567357565" duration="1000" />
-      <workItem from="1685583314824" duration="18666000" />
+      <workItem from="1685583314824" duration="22924000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1681708479928</created>
@@ -177,7 +169,21 @@
       <option name="project" value="LOCAL" />
       <updated>1685529509459</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Updated step 6 and 7">
+      <created>1685687574391</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1685687574392</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Refactor code to calculate V in a function">
+      <created>1685690510465</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1685690510465</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,6 +211,8 @@
     <MESSAGE value="Refactor code to calcute V for col = 0, 1, 2, ... n-1" />
     <MESSAGE value="Calculation of V for each column" />
     <MESSAGE value="Updated calculation of W^+_j_1, W^-_j_2,W^+_j_3, W^-_j_3" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated calculation of W^+_j_1, W^-_j_2,W^+_j_3, W^-_j_3" />
+    <MESSAGE value="Updated step 6 and 7" />
+    <MESSAGE value="Refactor code to calculate V in a function" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor code to calculate V in a function" />
   </component>
 </project>
