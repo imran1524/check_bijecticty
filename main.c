@@ -55,6 +55,8 @@ void print_Sbox(int **S_box, int row_number, int col_number);
 int** calculate_v_i_j(int** S_box, int row_number, int col_number);
 int calculate_L_omega (int i_value, int omega);
 struct array_object calculate_V(int* X_v, int col_number);
+int is_satisfy_theorem_3_without_omega(int* f, int row, int* W_plus_j_1_2_input, int* W_minus_j_1_2_input);
+int is_satisfy_theorem_3_with_omega(int* f, int row, int* W_plus_j_1_2_input, int* W_minus_j_1_2_input, int *W_input);
 
 int main() {
     i = 1 << n;
@@ -77,7 +79,6 @@ int main() {
     int L_omega;
     struct array_object V;
 
-
     //GENERATING WALSH HADAMARD MATRIX OF ORDER j
     int **WH = allocate_2D_matrix(j, j);
     WH = generate_WHM(j);
@@ -89,7 +90,6 @@ int main() {
         }
         //printf("\n");
     }
-
 
     //ASSIGNING f_j where f_0 is MSB and f_(j-1) is MSB as represented by the array
     for (int col = 0; col < j; col++) {
@@ -104,6 +104,11 @@ int main() {
         }
 
         //CALCULATION OF v_i_j USING FUNCTION
+
+        int counter = 0;
+        Step_one:
+        counter++;
+        printf("counter = %d\n", counter);
         v_i_j = calculate_v_i_j(D, i, col);
         // printf("j = %d\n", col);
         int sum = 0;
@@ -122,12 +127,16 @@ int main() {
         //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
         //printf("\n");
 
-
         V = calculate_V(X_v, col);
+
+
+        //Calculate V
+
+        //Calculate F_D(j-1) and F_F(j)
 
         //printf("index_V = %d\n");
         for (int index = 0; index < V.array_size; index++) {
-            //printf("V[%d] = %d\n", index, V[index]);
+            printf("V[%d] = %d\n", index, V.array[index]);
         }
 
         //STEP # 2: IF V IS ∅, OUTPUT D(j), OTHERWISE GO TO STEP # 3
@@ -136,6 +145,7 @@ int main() {
             for (int row = 0; row < i; row++) {
                 printf("D[%d][%d] = %d\n", row, col, D[row][col]);
             }
+            continue; //IF D IS BIJECTIVE FOR j THEN TO GOT
         } else {
             printf("D(%d) is NOT bijective\n", col);
             printf("Going to Step 3\n", col);
@@ -165,25 +175,25 @@ int main() {
             W_plus_j_3 = calculate_W_plus_3(S_j_omega, i, WH_max);
             W_minus_j_3 = calculate_W_minus_3(S_j_omega, i, WH_max);
 
-            if(W_plus_j_1.array_size == 0){
+            if (W_plus_j_1.array_size == 0) {
                 printf("W_plus_j_1 is empty\n");
-            }else{
+            } else {
                 printf("W_plus_j_1.array_size = %d\n", W_plus_j_1.array_size);
                 for (int index = 0; index < W_plus_j_1.array_size; index++) {
                     printf("W_plus_j_1[%d] = %d\n", index, W_plus_j_1.array[index]);
                 }
             }
 
-            if(W_minus_j_1.array_size == 0){
+            if (W_minus_j_1.array_size == 0) {
                 printf("W_minus_j_1 is empty\n");
-            }else{
+            } else {
                 printf("W_minus_j_1.array_size = %d\n", W_minus_j_1.array_size);
                 for (int index = 0; index < W_minus_j_1.array_size; index++) {
                     printf("W_minus_j_1[%d] = %d\n", index, W_minus_j_1.array[index]);
                 }
             }
 
-            if(W_plus_j_2.array_size == 0){
+            if (W_plus_j_2.array_size == 0) {
                 printf("W_plus_j_2 is empty\n");
             } else {
                 printf("W_plus_j_2.array_size = %d\n", W_plus_j_2.array_size);
@@ -229,21 +239,21 @@ int main() {
                                             W_minus_j_2.array_size);
 
             //printf("W_plus_j_1_2.array_size = %d\n", W_plus_j_1_2.array_size);
-            if(W_plus_j_1_2.array_size == 0) {
+            if (W_plus_j_1_2.array_size == 0) {
                 printf("W_plus_j_1_2 is empty\n");
-            }else{
+            } else {
                 for (int W_plus_j_1_2_index = 0;
                      W_plus_j_1_2_index < W_plus_j_1_2.array_size; W_plus_j_1_2_index++) {
-                    printf("W_plus_j_1_2[%d] = %d\n",W_plus_j_1_2_index, W_plus_j_1_2.array[W_plus_j_1_2_index]);
+                    printf("W_plus_j_1_2[%d] = %d\n", W_plus_j_1_2_index, W_plus_j_1_2.array[W_plus_j_1_2_index]);
                 }
             }
 
-            if(W_minus_j_1_2.array_size == 0) {
+            if (W_minus_j_1_2.array_size == 0) {
                 printf("W_minus_j_1_2 is empty\n");
-            }else{
+            } else {
                 for (int W_minus_j_1_2_index = 0;
                      W_minus_j_1_2_index < W_minus_j_1_2.array_size; W_minus_j_1_2_index++) {
-                    printf("W_minus_j_1_2[%d] = %d\n",W_minus_j_1_2_index, W_minus_j_1_2.array[W_minus_j_1_2_index]);
+                    printf("W_minus_j_1_2[%d] = %d\n", W_minus_j_1_2_index, W_minus_j_1_2.array[W_minus_j_1_2_index]);
                 }
             }
 
@@ -251,85 +261,61 @@ int main() {
 
             printf("\n");
             int a;
+            int is_theorem_3_satisfied_without_omega;
+            int is_theorem_3_satisfied_wit_omega;
+
+            int match_flag = 0;
             // printf("index_v = %d\n", index_v);
             //STEP 4: Set m = 1
             for (int m = 0; m < V.array_size; m++) {
                 //STEP 5: Set a=V(m),here V(m)is the m-th element in V int a;
                 a = V.array[m];
-                int is_condition_1_satisfied = 0;
-                int is_condition_2_satisfied = 0;
                 //printf("a = %d\n", a);
                 int count_X_v_1 = 0;
                 //STEP 6: CHECK FOR v_i_j = a and v_i_j satisfies Theorem 3, complement the Boolean function value f_j_i, update and return to Step 1;
                 // Otherwise, go to Step 7.
                 for (int row = 0; row < i; row++) {
-                    if (a == v_i_j[row][col]) { //Checking if we can get v_i_j = a
+                    if ((a == v_i_j[row][col]) && (match_flag == 0)) { //Checking if we can get v_i_j = a
+                        match_flag = 1;
                         printf("rows_with_1 = %d\n", row);
                         //CHECK IF v_i_j SATISFY THEOREM 3 WHERE i = row
 
-                        //TO SATISFY THEOREM 3:
-                        //ASSUMPTION F(D(j-1)) = 0 and F(D(j)) > 2^n-1-j
-                        //CONDITION # 1
-                        //TO SATISFY THE CONDITION WE NEED TO KNOW omega, i, j
-                        //j IS THE COLUMN WE GET FROM D(j)
-                        //i IS THE ROW
-                        //omega IS THE SET OF W^+_j,1,2
-                       for(int index = 0; index < W_plus_j_1_2.array_size; index++){
-                           for(int omega = 0; omega < i; omega++){
-                               if(omega == W_plus_j_1_2.array[index]){
-                                   L_omega = calculate_L_omega(row, omega);
-                                   if(f[row] == L_omega){
-                                       is_condition_1_satisfied = 1;
-                                       printf("is_condition_1_satisfied = %d\n", is_condition_1_satisfied);
-                                   };
-                               }
-                           }
-                       }
-                        //CONDITION # 2
-                        //TO SATISFY THE CONDITION WE NEED TO KNOW omega, i, j
-                        //j IS THE COLUMN WE GET FROM D(j)
-                        //i IS THE ROW
-                        //omega IS THE SET OF W^-_j,1,2
-                        for(int index = 0; index < W_minus_j_1_2.array_size; index++){
-                            //printf("W_minus_j_1_2.array[%d] = %d\n", index, W_minus_j_1_2.array[index]);
-                            for(int omega = 0; omega < i; omega++){
-                                if(omega == W_minus_j_1_2.array[index]){
-                                    printf("omega = %d\n", omega);
-                                    L_omega = calculate_L_omega(row, omega);
-                                    printf("L_omega = %d\n", L_omega);
-                                    printf("f[%d] = %d\n", row, f[row]);
-                                    if(f[row] != L_omega){
-                                        is_condition_2_satisfied = 1;
-                                    };
-                                }
-                            }
-                        }
-
-                        if( is_condition_1_satisfied && is_condition_2_satisfied){
+                        is_theorem_3_satisfied_without_omega = is_satisfy_theorem_3_without_omega(f, row,
+                                                                                                  W_plus_j_1_2.array,
+                                                                                                  W_minus_j_1_2.array);
+                        printf("is_theorem_3_satisfied_without_omega = %d\n", is_theorem_3_satisfied_without_omega);
+                        if (is_theorem_3_satisfied_without_omega == 1) {
                             printf("Complement f_i_j for row = %d\n", row);
                             printf("Before complement:f[%d] = %d\n", row, f[row]);
+
+                            //COMPLEMENT f_i_j
                             complement_f_j_i(f[row]);
+
+                            //UPDATE D(j)
+                            D[row][col] = f[row];
                             printf("After complement:f[%d] = %d\n", row, f[row]);
-                        }else{
-                            printf("NOT Complement f_i_j for row = %d\n", row);
+                            break;
                         }
-                        D[row][col] = f[row];
-//                        if (col == 0) {
-//                            printf("j = %d\n", col);
-//                            printf("F(D(%d)) = %d\n", col, F_D_j[col]);
-//                        }
-                        //CALCULATING W^+_j,1,2
-                        // W^-_j,1,2, W^+_j,2,3, W^-_j,2,3
-//                        //Calling W_1_plus
-//                        //printf("\n");
-//                        //    printf("W_j_1_minus.array_size = %d\n", W_j_1_minus.array_size);
-//                        //    printf("W_j_1_minus:\n");
-//                        for (int index = 0; index < W_minus_j_1.array_size; index++) {
-//                            //        printf("W_j_1_minus[%d] = %d\n", index, W_j_1_minus.array[index]);
-//                        }
-//
+                    } else if ((a == v_i_j[row][col]) && (match_flag == 1)) {
                         W_j_1 = calculate_union(W_plus_j_1.array, W_minus_j_1.array, W_plus_j_1.array_size,
                                                 W_minus_j_1.array_size);
+
+                        is_theorem_3_satisfied_wit_omega = is_satisfy_theorem_3_with_omega(f, row, W_plus_j_1_2.array,
+                                                                                           W_minus_j_1_2.array,
+                                                                                           W.array);;
+                        printf("is_theorem_3_satisfied_wit_omega = %d\n", is_theorem_3_satisfied_wit_omega);
+                        if (is_theorem_3_satisfied_wit_omega == 1) {
+                            printf("Complement f_i_j for row = %d\n", row);
+                            printf("Before complement:f[%d] = %d\n", row, f[row]);
+
+                            //COMPLEMENT f_i_j
+                            complement_f_j_i(f[row]);
+
+                            //UPDATE D(j)
+                            D[row][col] = f[row];
+                            printf("After complement:f[%d] = %d\n", row, f[row]);
+                            goto Step_one;
+                        }
                         //printf("\n");
                         //    printf("W_j_1.array_size = %d\n", W_j_1.array_size);
                         //    printf("W_j_1:\n");
@@ -346,21 +332,37 @@ int main() {
                         if (count_X_v_1 > (1 << (n - 1 - col))) {
                             D[row][col] = complement_f_j_i(f_j[row][col]);
                         }
-                        //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
-                        //printf("\n");
-
-                        break;
-                    }else{
-                        //STEP 7
                     }
 
-                }//END OF FOR LOOP of row CHECKING WHICH ROW IS EQUAL TO a
-            }//END OF FOR LOOP OF m
+
+//                        if (col == 0) {
+//                            printf("j = %d\n", col);
+//                            printf("F(D(%d)) = %d\n", col, F_D_j[col]);
+//                        }
+                    //CALCULATING W^+_j,1,2
+                    // W^-_j,1,2, W^+_j,2,3, W^-_j,2,3
+//                        //Calling W_1_plus
+//                        //printf("\n");
+//                        //    printf("W_j_1_minus.array_size = %d\n", W_j_1_minus.array_size);
+//                        //    printf("W_j_1_minus:\n");
+//                        for (int index = 0; index < W_minus_j_1.array_size; index++) {
+//                            //        printf("W_j_1_minus[%d] = %d\n", index, W_j_1_minus.array[index]);
+//                        }
+//
+
+                    //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
+                    //printf("\n");
+
+                    break;
+                }
+
+            }//END OF FOR LOOP of row CHECKING WHICH ROW IS EQUAL TO a
+        }//END OF FOR LOOP OF m
 
             //CALCULATION OF v_i_j USING FUNCTION
             v_i_j = calculate_v_i_j(D, i, col);
             // printf("j = %d\n", col);
-            int sum = 0;
+//            int sum = 0;
             for (int row = 0; row < i; row++) {
                 v_j[row] = v_i_j[row][col];
                 //printf("v_j[%d] = %d\n", row, v_j[row]);
@@ -378,7 +380,7 @@ int main() {
 
         }
         //printf("\n");
-    }//END OF FOR LOOP COL OF j
+    //END OF FOR LOOP COL OF j
     //printf("Updated S-box\n");
     //print_Sbox(D, i, j);
 
@@ -867,4 +869,112 @@ struct array_object calculate_V(int* X_v, int col_number){
         //sum = X_v[index] + sum;
     }
     return V;
+}
+
+int is_satisfy_theorem_3_without_omega(int* f, int row, int* W_plus_j_1_2_input, int* W_minus_j_1_2_input){
+    int is_condition_1_satisfied = 0;
+    int is_condition_2_satisfied = 0;
+    int is_satisfy;
+    int L_omega;
+    //TO SATISFY THEOREM 3:
+    //ASSUMPTION F(D(j-1)) = 0 and F(D(j)) > 2^n-1-j
+    //CONDITION # 1
+    //TO SATISFY THE CONDITION WE NEED TO KNOW omega, i, j
+    //j IS THE COLUMN WE GET FROM D(j)
+    //i IS THE ROW
+    //omega IS THE SET OF W^+_j,1,2
+
+    for(int index = 0; index < W_plus_j_1_2.array_size; index++){
+        for(int omega = 0; omega < i; omega++){
+            if(omega == W_plus_j_1_2.array[index]){
+                L_omega = calculate_L_omega(row, omega);
+                if(f[row] == L_omega){
+                    is_condition_1_satisfied = 1;
+                    //printf("is_condition_1_satisfied = %d\n", is_condition_1_satisfied);
+                };
+            }
+        }
+    }
+    //CONDITION # 2
+    //TO SATISFY THE CONDITION WE NEED TO KNOW omega, i, j
+    //j IS THE COLUMN WE GET FROM D(j)
+    //i IS THE ROW
+    //omega IS THE SET OF W^-_j,1,2
+    for(int index = 0; index < W_minus_j_1_2.array_size; index++){
+        //printf("W_minus_j_1_2.array[%d] = %d\n", index, W_minus_j_1_2.array[index]);
+        for(int omega = 0; omega < i; omega++){
+            if(omega == W_minus_j_1_2.array[index]){
+                printf("omega = %d\n", omega);
+                L_omega = calculate_L_omega(row, omega);
+                printf("L_omega = %d\n", L_omega);
+                printf("f[%d] = %d\n", row, f[row]);
+                if(f[row] != L_omega){
+                    is_condition_2_satisfied = 1;
+                    //printf("is_condition_1_satisfied = %d\n", is_condition_1_satisfied);
+                };
+            }
+        }
+    }
+
+    if( is_condition_1_satisfied && is_condition_2_satisfied){
+        is_satisfy = 1;
+    }else {
+        is_satisfy = 0;
+    }
+
+    return is_satisfy;
+}
+
+int is_satisfy_theorem_3_with_omega(int* f, int row, int* W_plus_j_1_2_input, int* W_minus_j_1_2_input, int *W_input){
+    int is_condition_1_satisfied = 0;
+    int is_condition_2_satisfied = 0;
+    int is_satisfy;
+    int L_omega;
+    //TO SATISFY THEOREM 3:
+    //ASSUMPTION F(D(j-1)) = 0 and F(D(j)) > 2^n-1-j
+    //CONDITION # 1
+    //TO SATISFY THE CONDITION WE NEED TO KNOW omega, i, j
+    //j IS THE COLUMN WE GET FROM D(j)
+    //i IS THE ROW
+    //omega IS THE SET OF W^+_j,1,2
+
+    for(int index = 0; index < W_plus_j_1_2.array_size; index++){
+        for(int omega = 0; omega < i; omega++){
+            if(omega == W_plus_j_1_2.array[index]){
+                L_omega = calculate_L_omega(row, omega);
+                if(f[row] == L_omega){
+                    is_condition_1_satisfied = 1;
+                    //printf("is_condition_1_satisfied = %d\n", is_condition_1_satisfied);
+                };
+            }
+        }
+    }
+    //CONDITION # 2
+    //TO SATISFY THE CONDITION WE NEED TO KNOW omega, i, j
+    //j IS THE COLUMN WE GET FROM D(j)
+    //i IS THE ROW
+    //omega IS THE SET OF W^-_j,1,2
+    for(int index = 0; index < W_minus_j_1_2.array_size; index++){
+        //printf("W_minus_j_1_2.array[%d] = %d\n", index, W_minus_j_1_2.array[index]);
+        for(int omega = 0; omega < i; omega++){
+            if(omega == W_minus_j_1_2.array[index]){
+                printf("omega = %d\n", omega);
+                L_omega = calculate_L_omega(row, omega);
+                printf("L_omega = %d\n", L_omega);
+                printf("f[%d] = %d\n", row, f[row]);
+                if(f[row] != L_omega){
+                    is_condition_2_satisfied = 1;
+                    //printf("is_condition_1_satisfied = %d\n", is_condition_1_satisfied);
+                };
+            }
+        }
+    }
+
+    if( is_condition_1_satisfied && is_condition_2_satisfied){
+        is_satisfy = 1;
+    }else {
+        is_satisfy = 0;
+    }
+
+    return is_satisfy;
 }
