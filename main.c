@@ -29,6 +29,8 @@ struct array_object W_plus_j_1_2;
 struct array_object W_minus_j_1_2;
 struct array_object W_plus_j_2_3;
 struct array_object W_minus_j_2_3;
+struct array_object W;
+
 
 //FUNCTION SIGNATURES
 int generateBinaryValue();
@@ -51,6 +53,7 @@ struct array_object calculate_union(int* array_1, int* array_2, int array_size_1
 int complement_f_j_i(int f_j_i);
 void print_Sbox(int **S_box, int row_number, int col_number);
 int** calculate_v_i_j(int** S_box, int row_number, int col_number);
+int calculate_L_omega (int i_value, int omega);
 
 int main() {
     i = 1 << n;
@@ -71,6 +74,8 @@ int main() {
     int *V = (int *) malloc(j + sizeof(int));
     int WH_max;
     int *updated_D = (int *) malloc(j * sizeof(int));
+    int L_omega;
+
 
     //GENERATING WALSH HADAMARD MATRIX OF ORDER j
     int **WH = allocate_2D_matrix(j, j);
@@ -83,6 +88,7 @@ int main() {
         }
         //printf("\n");
     }
+
 
     //ASSIGNING f_j where f_0 is MSB and f_(j-1) is MSB as represented by the array
     for (int col = 0; col < j; col++) {
@@ -146,7 +152,7 @@ int main() {
         } else {
             printf("D(%d) is NOT bijective\n", col);
             printf("Going to Step 3\n", col);
-        //STEP # 3. According to the Boolean function f_j in D(j), calculate the sets W^plus_j,1, W^minus_j,1,W^plus_j,2 AND W^minus_j,2.
+            //STEP # 3. According to the Boolean function f_j in D(j), calculate the sets W^plus_j,1, W^minus_j,1,W^plus_j,2 AND W^minus_j,2.
             //APPLYING WALSH HADAMARD MATRIX ON f_j TO CALCULATE WALSH HADAMARD SPECTRUM OF f_j
             S_j_omega = matrix_multiplication(f, WH);
 
@@ -185,9 +191,9 @@ int main() {
                 printf("W_minus_j_1 is empty\n");
             }else{
                 printf("W_minus_j_1.array_size = %d\n", W_minus_j_1.array_size);
-                 for (int index = 0; index < W_minus_j_1.array_size; index++) {
-                     printf("W_minus_j_1[%d] = %d\n", index, W_minus_j_1.array[index]);
-                 }
+                for (int index = 0; index < W_minus_j_1.array_size; index++) {
+                    printf("W_minus_j_1[%d] = %d\n", index, W_minus_j_1.array[index]);
+                }
             }
 
             if(W_plus_j_2.array_size == 0){
@@ -200,7 +206,7 @@ int main() {
             }
 
             if (W_minus_j_2.array_size == 0) {
-                    printf("W_minus_j_2 is empty\n");
+                printf("W_minus_j_2 is empty\n");
             } else {
                 printf("W_minus_j_2.array_size = %d\n", W_minus_j_2.array_size);
                 for (int index = 0; index < W_minus_j_2.array_size; index++) {
@@ -208,104 +214,125 @@ int main() {
                 }
             }
 
-            if (W_minus_j_3.array_size == 0) {
-                printf("W_minus_j_3 is empty\n");
-                } else {
+            if (W_plus_j_3.array_size == 0) {
+                printf("W_plus_j_3 is empty\n");
+            } else {
                 printf("W_plus_j_3.array_size = %d\n", W_plus_j_3.array_size);
                 for (int index = 0; index < W_plus_j_3.array_size; index++) {
-                        printf("W_plus_j_3_[%d] = %d\n", index, W_plus_j_3.array[index]);
-                    }
+                    printf("W_plus_j_3_[%d] = %d\n", index, W_plus_j_3.array[index]);
                 }
+            }
 
             if (W_minus_j_3.array_size == 0) {
-                    printf("W_minus_j_3 is empty\n");
-                } else {
-                    printf("W_minus_j_3.array_size = %d\n", W_minus_j_3.array_size);
-                    for (int index = 0; index < W_minus_j_3.array_size; index++) {
-                        printf("W_j_3_minus[%d] = %d\n", index, W_minus_j_3.array[index]);
-                    }
-                }
-
-                for (int index = 0; index < W_minus_j_1_2.array_size; index++) {
-                    //        printf("W_j_1_2_minus[%d] = %d\n", index, W_j_1_2_minus.array[index]);
-                }
-
-
-                for (int index = 0; index < W_plus_j_2_3.array_size; index++) {
-                    //        printf("W_j_2_3_plus[%d] = %d\n", index, W_j_2_3_plus.array[index]);
-                }
-                //    printf("**********************************************************************\n");
-                //**************************************************************************************printf("W_j_2_minus:\n");
-                //    printf("W_j_2_minus.array_size = %d\n", W_j_2_minus.array_size);
-                for (int index = 0; index < W_minus_j_2.array_size; index++) {
-                    //        printf("W_j_2_minus[%d] = %d\n", index, W_j_2_minus.array[index]);
-                }
-
-                //    printf("\n");
-                //    printf("W_j_3_minus.array_size = %d\n", W_j_3_minus.array_size);
-                //    printf("W_j_3_minus:\n");
+                printf("W_minus_j_3 is empty\n");
+            } else {
+                printf("W_minus_j_3.array_size = %d\n", W_minus_j_3.array_size);
                 for (int index = 0; index < W_minus_j_3.array_size; index++) {
-                    //        printf("W_j_3_minus[%d] = %d\n", index, W_j_3_minus.array[index]);
+                    printf("W_j_3_minus[%d] = %d\n", index, W_minus_j_3.array[index]);
                 }
+            }
 
-                //W_j_2_3_minus = calculate_union(W_j_2_minus.array, W_j_3_minus.array, W_j_2_minus.array_size,
-                //W_j_3_minus.array_size);
-                //    printf("\n");
-                //    printf("W_j_2_3_minus.array_size = %d\n", W_j_2_3_minus.array_size);
-                //    printf("W_j_2_3_minus:\n");
-                for (int index = 0; index < W_minus_j_2_3.array_size; index++) {
-                    //        printf("W_j_2_3_minus[%d] = %d\n", index, W_j_2_3_minus.array[index]);
+            //CALCULATING W^+_j,1,2
+            W_plus_j_1_2 = calculate_union(W_plus_j_1.array, W_plus_j_2.array, W_plus_j_1.array_size,
+                                           W_plus_j_2.array_size);
+
+
+            //CALCULATING W^+_j,1,2
+            W_minus_j_1_2 = calculate_union(W_minus_j_1.array, W_minus_j_2.array, W_minus_j_1.array_size,
+                                            W_minus_j_2.array_size);
+
+            //printf("W_plus_j_1_2.array_size = %d\n", W_plus_j_1_2.array_size);
+            if(W_plus_j_1_2.array_size == 0) {
+                printf("W_plus_j_1_2 is empty\n");
+            }else{
+                for (int W_plus_j_1_2_index = 0;
+                     W_plus_j_1_2_index < W_plus_j_1_2.array_size; W_plus_j_1_2_index++) {
+                    printf("W_plus_j_1_2[%d] = %d\n",W_plus_j_1_2_index, W_plus_j_1_2.array[W_plus_j_1_2_index]);
                 }
+            }
 
-                //CALCULATING W^+_j,1,2
-                W_plus_j_1_2 = calculate_union(W_plus_j_1.array, W_plus_j_2.array, W_plus_j_1.array_size,
-                                               W_plus_j_2.array_size);
+            if(W_minus_j_1_2.array_size == 0) {
+                printf("W_minus_j_1_2 is empty\n");
+            }else{
+                for (int W_minus_j_1_2_index = 0;
+                     W_minus_j_1_2_index < W_minus_j_1_2.array_size; W_minus_j_1_2_index++) {
+                    printf("W_minus_j_1_2[%d] = %d\n",W_minus_j_1_2_index, W_minus_j_1_2.array[W_minus_j_1_2_index]);
+                }
+            }
 
-                //CALCULATING W^+_j,1,2
-                W_minus_j_1_2 = calculate_union(W_minus_j_1.array, W_minus_j_2.array, W_minus_j_1.array_size,
-                                                W_minus_j_2.array_size);
+            W = calculate_union(W_plus_j_1.array, W_minus_j_1.array, W_plus_j_1.array_size, W_minus_j_1.array_size);
 
-                printf("\n");
-                int a;
-                // printf("index_v = %d\n", index_v);
-                //STEP 4: Set m = 1
-                for (int m = 0; m < index_V; m++) {
+            printf("\n");
+            int a;
+            // printf("index_v = %d\n", index_v);
+            //STEP 4: Set m = 1
+            for (int m = 0; m < index_V; m++) {
+                //STEP 5: Set a=V(m),here V(m)is the m-th element in V int a;
+                a = V[m];
+                int is_condition_1_satisfied = 0;
+                int is_condition_2_satisfied = 0;
+                //printf("a = %d\n", a);
+                int count_X_v_1 = 0;
+                //STEP 6: CHECK FOR v_i_j = a and v_i_j satisfies Theorem 3, complement the Boolean function value f_j_i, update and return to Step 1;
+                // Otherwise, go to Step 7.
+                for (int row = 0; row < i; row++) {
+                    if (a == v_i_j[row][col]) { //Checking if we can get v_i_j = a
+                        printf("rows_with_1 = %d\n", row);
+                        //CHECK IF v_i_j SATISFY THEOREM 3 WHERE i = row
 
-                    //STEP 5: Set a=V(m),here V(m)is the m-th element in V int a;
-                    a = V[m];
-                    //printf("a = %d\n", a);
-                    int count_X_v_1 = 0;
-                    //STEP 6: CHECK FOR v_i_j = a and v_i_j satisfies Theorem 3, complement the Boolean function value f_j_i, update and return to Step 1;
-                    // Otherwise, go to Step 7.
-                    for (int row = 0; row < i; row++) {
-                        if (a == v_i_j[row][col]) { //Checking if we can get v_i_j = a
-                            //printf("rows_with_1 = %d\n", row);
-                            //CHECK IF v_i_j SATISFY THEOREM 3 WHERE i = row
+                        //TO SATISFY THEOREM 3:
+                        //ASSUMPTION F(D(j-1)) = 0 and F(D(j)) > 2^n-1-j
+                        //CONDITION # 1
+                        //TO SATISFY THE CONDITION WE NEED TO KNOW omega, i, j
+                        //j IS THE COLUMN WE GET FROM D(j)
+                        //i IS THE ROW
+                        //omega IS THE SET OF W^+_j,1,2
+                       for(int index = 0; index < W_plus_j_1_2.array_size; index++){
+                           for(int omega = 0; omega < i; omega++){
+                               if(omega == W_plus_j_1_2.array[index]){
+                                   L_omega = calculate_L_omega(row, omega);
+                                   if(f[row] == L_omega){
+                                       is_condition_1_satisfied = 1;
+                                       printf("is_condition_1_satisfied = %d\n", is_condition_1_satisfied);
+                                   };
+                               }
+                           }
+                       }
+                        //CONDITION # 2
+                        //TO SATISFY THE CONDITION WE NEED TO KNOW omega, i, j
+                        //j IS THE COLUMN WE GET FROM D(j)
+                        //i IS THE ROW
+                        //omega IS THE SET OF W^-_j,1,2
+                        for(int index = 0; index < W_minus_j_1_2.array_size; index++){
+                            //printf("W_minus_j_1_2.array[%d] = %d\n", index, W_minus_j_1_2.array[index]);
+                            for(int omega = 0; omega < i; omega++){
+                                if(omega == W_minus_j_1_2.array[index]){
+                                    printf("omega = %d\n", omega);
+                                    L_omega = calculate_L_omega(row, omega);
+                                    printf("L_omega = %d\n", L_omega);
+                                    printf("f[%d] = %d\n", row, f[row]);
+                                    if(f[row] != L_omega){
+                                        is_condition_2_satisfied = 1;
+                                    };
+                                }
+                            }
+                        }
 
-                            //TO SATISFY THEOREM 3:
-                            //ASSUMPTION F(D(j-1)) = 0 and F(D(j)) > 2^n-1-j
-                            if (col == 0) {
+                        if( is_condition_1_satisfied && is_condition_2_satisfied){
+                            printf("Complement f_i_j for row = %d\n", row);
+                            printf("Before complement:f[%d] = %d\n", row, f[row]);
+                            complement_f_j_i(f[row]);
+                            printf("After complement:f[%d] = %d\n", row, f[row]);
+                        }else{
+                            printf("NOT Complement f_i_j for row = %d\n", row);
+                        }
+                        D[row][col] = f[row];
+//                        if (col == 0) {
 //                            printf("j = %d\n", col);
 //                            printf("F(D(%d)) = %d\n", col, F_D_j[col]);
-                            }
-
-                            //printf("W_plus_j_1_2.array_size = %d\n", W_plus_j_1_2.array_size);
-                            for (int W_plus_j_1_2_index = 0;
-                                 W_plus_j_1_2_index < W_plus_j_1_2.array_size; W_plus_j_1_2_index++) {
-                                //printf("W_plus_j_1_2[%d] = %d\n",W_plus_j_1_2_index, W_plus_j_1_2.array[W_plus_j_1_2_index]);
-                            }
-
-                            //CALCULATING W^+_j,1,2
-                            //printf("W_minus_j_1_2:\n");
-                            //printf(" W_minus_j_1_2.array_size = %d\n", W_minus_j_1_2.array_size);
-                            for (int W_minus_j_1_2_index = 0;
-                                 W_minus_j_1_2_index < W_minus_j_1_2.array_size; W_minus_j_1_2_index++) {
-                                //printf("W_minus_j_1_2[%d] = %d\n",W_minus_j_1_2_index, W_plus_j_1_2.array[W_minus_j_1_2_index]);
-                            }
-
-
-                            //CALCULATING W^+_j,1,2
-                            // W^-_j,1,2, W^+_j,2,3, W^-_j,2,3
+//                        }
+                        //CALCULATING W^+_j,1,2
+                        // W^-_j,1,2, W^+_j,2,3, W^-_j,2,3
 //                        //Calling W_1_plus
 //                        //printf("\n");
 //                        //    printf("W_j_1_minus.array_size = %d\n", W_j_1_minus.array_size);
@@ -314,156 +341,94 @@ int main() {
 //                            //        printf("W_j_1_minus[%d] = %d\n", index, W_j_1_minus.array[index]);
 //                        }
 //
-//                        W_j_1 = calculate_union(W_plus_j_1.array, W_minus_j_1.array, W_plus_j_1.array_size,
-//                                                W_minus_j_1.array_size);
-//                        //printf("\n");
-//                        //    printf("W_j_1.array_size = %d\n", W_j_1.array_size);
-//                        //    printf("W_j_1:\n");
+                        W_j_1 = calculate_union(W_plus_j_1.array, W_minus_j_1.array, W_plus_j_1.array_size,
+                                                W_minus_j_1.array_size);
+                        //printf("\n");
+                        //    printf("W_j_1.array_size = %d\n", W_j_1.array_size);
+                        //    printf("W_j_1:\n");
 
 
-                            if (col > 0) {
+                        if (col > 0) {
 //                            printf("j = %d\n", col);
 //                            printf("F(D(%d)) = %d\n", col-1, F_D_j[col-1]);
 //                            printf("F(D(%d)) = %d\n", col, F_D_j[col]);
-                            }
-                            count_X_v_1++;
-                            //printf("f_j[%d][%d] = %d\n", row, col, f_j[row][col]);
-                            //printf("count_X_v_1 = %d\n", count_X_v_1);
-                            if (count_X_v_1 > (1 << (n - 1 - col))) {
-                                D[row][col] = complement_f_j_i(f_j[row][col]);
-                            }
-                            //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
-                            //printf("\n");
                         }
-                    }//END OF FOR LOOP of row CHECKING WHICH ROW IS EQUAL TO a
-                }//END OF FOR LOOP OF m
+                        count_X_v_1++;
+                        //printf("f_j[%d][%d] = %d\n", row, col, f_j[row][col]);
+                        //printf("count_X_v_1 = %d\n", count_X_v_1);
+                        if (count_X_v_1 > (1 << (n - 1 - col))) {
+                            D[row][col] = complement_f_j_i(f_j[row][col]);
+                        }
+                        //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
+                        //printf("\n");
+                    }
+
+                }//END OF FOR LOOP of row CHECKING WHICH ROW IS EQUAL TO a
+            }//END OF FOR LOOP OF m
 
 
-                //printf("V[%d] = %d\n", m, V[m]);
 
-
-//            printf("Printing Updated_X_v\n");
-//            for(int col = 0; col < j; col++){
-//                printf("j = %d\n", col);
-//                for(int row = 0; row < i; row++){
-//                    updated_D[row] = D[row][col];
-//                }
-//                updated_X_v = calculate_X_v(updated_D, i);
-//                for(int v = 0; v < (1 << col+1); v++){
-//                    printf("updated_X_v[%d] = %d\n", v, updated_X_v[v]);
-//                }
-//            }
-
-                //######################
-                //PRINTING X_v(j) FOR THE UPDATED
-//            for (int rows = 0; rows < i; rows++) {
-//                offset = 1;
-//                int sum = 0;
-//                //COLUMN NUMBER STARTS FROM THE LSB: j = 0 IS LSB, j = n-1 IS THE MSB
-//                //ONLY CALCULATE THE SUM FOR EACH ROW WITH SET BITS
-//                for (int cols = 0; cols < n; cols++) {
-//                    sum = D[rows][cols] * 1 << (offset - 1);
-//                    v_i_j[rows][offset - 1] = sum;
-//                    printf("v_i_j[%d][%d] = %d\n", rows, offset-1, v_i_j[rows][offset-1]);
-//                    offset++;
-//                }
-//            }
-                //    for (int col = 1; col < j; col++) {
-                //        for (int rows = 0; rows < i; rows++) {
-                //            D[rows][col] = D[rows][col] + D[rows][col - 1];
-                //            //printf("v_i_j[%d][%d] = %d\n", rows, col, v_i_j[rows][col]);
-                //        }
-                //    }
-                //
-                //    //CALCULATION OF #X_v(j) AND BIJECTIVE FITNESS FUNCTION, F(D(j)
-                //    for(int col = 0; col < j; col++) {
-                //        //printf("j = %d\n", col);
-                //        int sum = 0;
-                //        for (int row = 0; row < i; row++) {
-                //            v_j[row] = v_i_j[row][col];
-                //            //printf("v_j[%d] = %d\n", row, v_j[row]);
-                //        }
-                //
-                //        //CALCULATING OF #x_v(j)
-                //        //X_v CALCULATES REPETITION OF THE VALUE v IN SUB-MATRIX D(j) FOR j = 0, 1, 2, ... , n-1
-                //        X_v = calculate_X_v(v_j, i);
-                //        int index_v = 0;
-                //        int v = 1 << (col + 1);
-                //        for (int index = 0; index < v; index++) {
-                //            //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
-                //            //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
-                //
-                //            //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
-                //            //printf("v = %d\n", index);
-                //        }
-                //
-                //        //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j))
-                //        //F_D_j[col] = calculate_F_D_j(X_v, j, col);
-                //        //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
-                //        printf("\n");
-                //    }
-
-                //CALCULATION OF v_i_j USING FUNCTION
-                v_i_j = calculate_v_i_j(D, i, col);
-                // printf("j = %d\n", col);
-                int sum = 0;
-                for (int row = 0; row < i; row++) {
-                    v_j[row] = v_i_j[row][col];
-                    //printf("v_j[%d] = %d\n", row, v_j[row]);
-                }
-
-                //CALCULATION OF x_v and F(D(j)
-                //CALCULATING OF #x_v(j)
-                //X_v CALCULATES REPETITION OF THE VALUE v IN SUB-MATRIX D(j) FOR j = 0, 1, 2, ... , n-1
-                X_v = calculate_X_v(v_j, i);
-
-                //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j)) AFTER UPDATING D(j)
-                F_D_j[col] = calculate_F_D_j(X_v, j, col);
-                //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
-                //printf("\n");
-
+            //CALCULATION OF v_i_j USING FUNCTION
+            v_i_j = calculate_v_i_j(D, i, col);
+            // printf("j = %d\n", col);
+            int sum = 0;
+            for (int row = 0; row < i; row++) {
+                v_j[row] = v_i_j[row][col];
+                //printf("v_j[%d] = %d\n", row, v_j[row]);
             }
+
+            //CALCULATION OF x_v and F(D(j)
+            //CALCULATING OF #x_v(j)
+            //X_v CALCULATES REPETITION OF THE VALUE v IN SUB-MATRIX D(j) FOR j = 0, 1, 2, ... , n-1
+            X_v = calculate_X_v(v_j, i);
+
+            //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j)) AFTER UPDATING D(j)
+            F_D_j[col] = calculate_F_D_j(X_v, j, col);
+            //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
+            //printf("\n");
+
+        }
         //printf("\n");
     }//END OF FOR LOOP COL OF j
-        //printf("Updated S-box\n");
-        //print_Sbox(D, i, j);
+    //printf("Updated S-box\n");
+    //print_Sbox(D, i, j);
 
-        free_2D_array(v_i_j, i);
-        free(v_j);
-        free_2D_array(WH, i);
-        v_j = NULL;
+    free_2D_array(v_i_j, i);
+    free(v_j);
+    free_2D_array(WH, i);
+    v_j = NULL;
 
-        free(S_j_omega);
-        S_j_omega = NULL;
+    free(S_j_omega);
+    S_j_omega = NULL;
 
-        free(f);
-        f = NULL;
+    free(f);
+    f = NULL;
 
-        free(F_D_j);
-        F_D_j = NULL;
+    free(F_D_j);
+    F_D_j = NULL;
 
-        free(V);
-        V = NULL;
+    free(V);
+    V = NULL;
 
-        free(W_plus_j_1.array);
-        W_plus_j_1.array = NULL;
+    free(W_plus_j_1.array);
+    W_plus_j_1.array = NULL;
 
-        free(W_minus_j_1.array);
-        W_plus_j_1.array = NULL;
+    free(W_minus_j_1.array);
+    W_plus_j_1.array = NULL;
 
-        free(W_plus_j_2.array);
-        W_plus_j_2.array = NULL;
+    free(W_plus_j_2.array);
+    W_plus_j_2.array = NULL;
 
-        free(W_minus_j_2.array);
-        W_minus_j_2.array = NULL;
+    free(W_minus_j_2.array);
+    W_minus_j_2.array = NULL;
 
-        free(W_plus_j_3.array);
-        W_plus_j_3.array = NULL;
+    free(W_plus_j_3.array);
+    W_plus_j_3.array = NULL;
 
-        free(X_v);
-        X_v = NULL;
+    free(X_v);
+    X_v = NULL;
 
-        free_2D_array(ptr_sbox_matrix, i);
+    free_2D_array(ptr_sbox_matrix, i);
 
     return 0;
 } //END OF MAIN FUNCTION
@@ -552,15 +517,15 @@ int calculate_F_D_j(int *x_k_j, int rows, int cols){
     int sum = 0;
     int temp;
 //        printf("j = %d\n", cols );
-        for(int k = 0; k < (2 << (cols + 1) - 1); k++){
-            //printf("#x_k_j[%d]) = %d\n", k, x_k_j[k]);
-            //printf("2^%d - 1 - %d = %d\n", n, cols, 1 << (n - 1 - cols));
-            temp = abs(x_k_j[k]  - (1 << (rows-1-cols)));
-            sum = temp + sum;
-            F_D_j = -sum;
-            //printf("F_D_j[%d] = %d\n", k,temp);
-            //printf("\n");
-        }
+    for(int k = 0; k < (2 << (cols + 1) - 1); k++){
+        //printf("#x_k_j[%d]) = %d\n", k, x_k_j[k]);
+        //printf("2^%d - 1 - %d = %d\n", n, cols, 1 << (n - 1 - cols));
+        temp = abs(x_k_j[k]  - (1 << (rows-1-cols)));
+        sum = temp + sum;
+        F_D_j = -sum;
+        //printf("F_D_j[%d] = %d\n", k,temp);
+        //printf("\n");
+    }
 //        printf("F((D(%d) = %d\n",cols,  F_D_j);
 //        printf("\n");
     return F_D_j;
@@ -741,46 +706,51 @@ int calculate_WH_max (int* walsh_spectrum, int size){
     return WH_max;
 }
 
-struct array_object calculate_union(int* array_1, int* array_2, int array_size_1, int array_size_2){
+struct array_object calculate_union(int* array_1, int* array_2, int array_size_1, int array_size_2) {
     struct array_object union_array;
-    union_array.array = (int*) malloc((array_size_1 + array_size_2) * sizeof(int));
+    union_array.array = (int *) malloc((array_size_1 + array_size_2) * sizeof(int));
     union_array.array[0] = array_1[0];
     union_array.array_size = 0;
     int index_i;
     int index_j;
     int index_k;
-    // copy the element of set A in set C
-    for(index_i = 0; index_i < array_size_1; index_i++){
-        for(index_j = 0; index_j < index_k; index_j++){
-            if(union_array.array[index_j] == array_1[index_i]){
-                break;
-            }
-        }
-        //if not repeated then store value in set c
-        if(index_j == index_k){
-            union_array.array[index_k] = array_1[index_i];
-            index_k++;
-//            printf("index_k = %d\n", index_k);
-        }
-    }
-    // copy element of set B in set C
-    for(index_i = 0; index_i < array_size_2; index_i++){
-        for(index_j = 0; index_j < index_k; index_j++){
-            if(union_array.array[index_j] == array_2[index_i]){
-                break;
-            }
-        }
-        // if element is not repeated then store in set C
-        if(index_j == index_k){
-            union_array.array[index_k] = array_2[index_i];
-            index_k++;
-//            printf("index_k = %d\n", index_k);
-        }
-    }
-    union_array.array_size = index_k ;
-    return union_array;
-};
 
+    if ((array_size_1 == 0) && (array_size_2 == 0)) {
+        union_array.array_size = 0;
+        return union_array;
+    } else {
+        // copy the element of set A in set C
+        for (index_i = 0; index_i < array_size_1; index_i++) {
+            for (index_j = 0; index_j < index_k; index_j++) {
+                if (union_array.array[index_j] == array_1[index_i]) {
+                    break;
+                }
+            }
+            //if not repeated then store value in set c
+            if (index_j == index_k) {
+                union_array.array[index_k] = array_1[index_i];
+                index_k++;
+//            printf("index_k = %d\n", index_k);
+            }
+        }
+        // copy element of set B in set C
+        for (index_i = 0; index_i < array_size_2; index_i++) {
+            for (index_j = 0; index_j < index_k; index_j++) {
+                if (union_array.array[index_j] == array_2[index_i]) {
+                    break;
+                }
+            }
+            // if element is not repeated then store in set C
+            if (index_j == index_k) {
+                union_array.array[index_k] = array_2[index_i];
+                index_k++;
+//            printf("index_k = %d\n", index_k);
+            }
+        }
+        union_array.array_size = index_k;
+        return union_array;
+    };
+}
 //Complement f_j_i
 int complement_f_j_i(int f_j_i){
     return f_j_i == 0 ? 1 : 0;
@@ -841,4 +811,46 @@ int** calculate_v_i_j(int** S_box, int row_number, int col_number) {
         }
     }
     return v_i_j;
+}
+
+int calculate_L_omega (int i_value, int omega){
+    int L_omega = 0;
+    int product = 0;
+    int x_bit;
+    int omega_bit;
+
+    //x =     00000000
+    //omega = 00000001
+    //L_omega = 0.1 ^ 0.0 ^ 0.0 ^ 0^0 ^ 0.0 ^ 0.0 ^ 0.0 ^ 0.0 = 0
+
+    //x =     00000001
+    //omega = 00000001
+    //L_omega = 1.1 ^ 0.0 ^ 0.0 ^ 0^0 ^ 0.0 ^ 0.0 ^ 0.0 ^ 0.0 = 1
+
+    //x =     00000010
+    //omega = 00000001
+    //L_omega = 0.1 ^ 1.0 ^ 0.0 ^ 0^0 ^ 0.0 ^ 0.0 ^ 0.0 ^ 0.0 = 1
+
+    for(int bit_position = 0;bit_position < 8; bit_position++){
+        x_bit = (i_value >> bit_position) & 0x01;
+        omega_bit = (omega >> bit_position) & 0x01;
+        //printf("x_bit = %d\n", x_bit);
+        //printf("omega_bit = %d\n", omega_bit);
+       if(bit_position == 0){
+           product = x_bit  * omega_bit ;
+           //printf("%d * %d = %d\n", x_bit, omega_bit, product);
+
+           L_omega = product;
+       }else{
+           //printf("%d ^ %d = %d\n", L_omega, product,L_omega ^ product);
+           product = x_bit  * omega_bit ;
+           //printf("%d * %d = %d\n", x_bit, omega_bit, product);
+           L_omega = L_omega ^ product;
+       }
+
+        //printf("L_omega = %d\n", L_omega);
+        //printf("\n");
+    }
+
+    return L_omega;
 }

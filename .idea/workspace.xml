@@ -20,7 +20,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Calculation of V for each column">
+    <list default="true" id="021f24db-50a7-4a7a-aafc-7a4a7ed2815b" name="Changes" comment="Updated calculation of W^+_j_1, W^-_j_2,W^+_j_3, W^-_j_3">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
@@ -97,6 +97,8 @@
       <workItem from="1683531546335" duration="3240000" />
       <workItem from="1683608315264" duration="68427000" />
       <workItem from="1684385858695" duration="7133000" />
+      <workItem from="1685567357565" duration="1000" />
+      <workItem from="1685583314824" duration="18666000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1681708479928</created>
@@ -168,7 +170,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684386932186</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Updated calculation of W^+_j_1, W^-_j_2,W^+_j_3, W^-_j_3">
+      <created>1685529509459</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1685529509459</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,6 +204,7 @@
     <MESSAGE value="Printing #{X_v[j]} and F_D_j[j]" />
     <MESSAGE value="Refactor code to calcute V for col = 0, 1, 2, ... n-1" />
     <MESSAGE value="Calculation of V for each column" />
-    <option name="LAST_COMMIT_MESSAGE" value="Calculation of V for each column" />
+    <MESSAGE value="Updated calculation of W^+_j_1, W^-_j_2,W^+_j_3, W^-_j_3" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated calculation of W^+_j_1, W^-_j_2,W^+_j_3, W^-_j_3" />
   </component>
 </project>
