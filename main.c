@@ -11,6 +11,17 @@ struct array_object{
     int* array;
     int array_size;
 };
+
+struct D_object{
+    int* array;
+    int array_size;
+    int** v_i_j;
+    int v_i_j_size;
+    int* X_v;
+    int X_v_size;
+    int* F_D_j;
+    int F_D_j_size;
+};
 int n = 8;
 int i;
 int j;
@@ -30,7 +41,6 @@ struct array_object W_minus_j_1_2;
 struct array_object W_plus_j_2_3;
 struct array_object W_minus_j_2_3;
 struct array_object W;
-
 
 //FUNCTION SIGNATURES
 int generateBinaryValue();
@@ -55,10 +65,10 @@ int complement_f_j_i(int f_j_i);
 void print_Sbox(int **S_box, int row_number, int col_number);
 int** calculate_v_i_j(int** S_box, int row_number, int col_number);
 int calculate_L_omega (int i_value, int omega);
-struct array_object calculate_V(int* X_v, int col_number);
+struct D_object calculate_V(int** D_input_for_V, int col_number);
 int is_satisfy_theorem_3_without_omega(int* f, int row, int* W_plus_j_1_2_input, int* W_minus_j_1_2_input);
 int is_satisfy_theorem_3_with_omega(int* f, int row, int* W_plus_j_1_2_input, int* W_minus_j_1_2_input, int *W_input);
-int** make_D_bijective(int** D, int col_number);
+int** make_D_bijective(int** D, int j_index);
 //int** make_D_bijective(int** D, int col_number);
 int main() {
     i = 1 << n;
@@ -70,17 +80,20 @@ int main() {
     ptr_sbox_matrix = generate_Sbox_Matrix(i, j);
     D = allocate_2D_matrix(i, j);
     int** bijective_D = allocate_2D_matrix(i, j);
-    for (int col = 0; col < j; col++) {
+    for (int col = 0; col < 1; col++) {
         for (int row = 0; row < i; row++) {
+            //CONSTRUCT D(j) FROM FROM THE RANDOM SBOX WHERE j = 0, 1, 2, ..., n-1
             D[row][col] = ptr_sbox_matrix[row][j - col - 1];
-            //bijective_D = make_D_bijective(D, col);
             //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
         }
     }
 
-    for (int col = 0; col < j; col++) {
-        //printf("j = %d\n", col);
-        bijective_D = make_D_bijective(D, col);
+    bijective_D = make_D_bijective(D, 0);
+
+    for (int col = 0; col < 1; col++) {
+        for (int row = 0; row < i; row++) {
+            printf("bijective_D[%d][%d] = %d\n", row, col, bijective_D[row][col]);
+        }
     }
 
     return 0;
@@ -411,9 +424,9 @@ int complement_f_j_i(int f_j_i){
 
 void print_Sbox(int **S_box, int row_number, int col_number){
     for(int col = 0; col < col_number; col++){
-        printf("j = %d\n", col);
+//        printf("j = %d\n", col);
         for(int row = 0; row < row_number; row++){
-            printf("D[%d][%d] = %d\n", row, col, S_box[row][col]);
+//            printf("D[%d][%d] = %d\n", row, col, S_box[row][col]);
         }
     }
 }
@@ -508,30 +521,7 @@ int calculate_L_omega (int i_value, int omega){
     return L_omega;
 }
 
-struct array_object calculate_V(int* X_v, int col_number){
-    //CALCULATION OF V
-    struct array_object V;
-    V.array = (int*)malloc(i * sizeof(int));
-    V.array_size = 0;
 
-    //STEP # 1: FOR D(j) construct a set V = {v = v| v ∈ {0, 1, 2, 3, ..., 2^(j+1)-1} if #{X_v(j) > 2^n-1-j}
-    int v = (1 << (col_number + 1)) - 1;
-    //printf("v = %d\n", v);
-    int index_V = 0;
-    for (int index = 0; index <= v; index++) {
-        //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
-        //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
-        if (X_v[index] > (1 << (n - 1 - col_number))) {
-            V.array[index_V++] = index;
-            //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
-            //printf("v = %d\n", index);
-            V.array_size = index_V;
-        }
-        //printf("\n");
-        //sum = X_v[index] + sum;
-    }
-    return V;
-}
 
 int is_satisfy_theorem_3_without_omega(int* f, int row, int* W_plus_j_1_2_input, int* W_minus_j_1_2_input){
     int is_condition_1_satisfied = 0;
@@ -566,10 +556,10 @@ int is_satisfy_theorem_3_without_omega(int* f, int row, int* W_plus_j_1_2_input,
         //printf("W_minus_j_1_2.array[%d] = %d\n", index, W_minus_j_1_2.array[index]);
         for(int omega = 0; omega < i; omega++){
             if(omega == W_minus_j_1_2.array[index]){
-                printf("omega = %d\n", omega);
+//                printf("omega = %d\n", omega);
                 L_omega = calculate_L_omega(row, omega);
-                printf("L_omega = %d\n", L_omega);
-                printf("f[%d] = %d\n", row, f[row]);
+//                printf("L_omega = %d\n", L_omega);
+//                printf("f[%d] = %d\n", row, f[row]);
                 if(f[row] != L_omega){
                     is_condition_2_satisfied = 1;
                     //printf("is_condition_1_satisfied = %d\n", is_condition_1_satisfied);
@@ -620,10 +610,10 @@ int is_satisfy_theorem_3_with_omega(int* f, int row, int* W_plus_j_1_2_input, in
         //printf("W_minus_j_1_2.array[%d] = %d\n", index, W_minus_j_1_2.array[index]);
         for(int omega = 0; omega < i; omega++){
             if(omega == W_minus_j_1_2.array[index]){
-                printf("omega = %d\n", omega);
+//                printf("omega = %d\n", omega);
                 L_omega = calculate_L_omega(row, omega);
-                printf("L_omega = %d\n", L_omega);
-                printf("f[%d] = %d\n", row, f[row]);
+//                printf("L_omega = %d\n", L_omega);
+//                printf("f[%d] = %d\n", row, f[row]);
                 if(f[row] != L_omega){
                     is_condition_2_satisfied = 1;
                     //printf("is_condition_1_satisfied = %d\n", is_condition_1_satisfied);
@@ -639,7 +629,114 @@ int is_satisfy_theorem_3_with_omega(int* f, int row, int* W_plus_j_1_2_input, in
     return is_satisfy;
 }
 
-int** make_D_bijective(int** D_input, int col_number){
+//CALCULATION OF V
+struct D_object calculate_V(int** D_input_for_V, int col_number){
+    struct D_object V;
+
+    V.array = (int*) malloc(i * sizeof(int));
+    V.array_size = 0;
+    V.v_i_j = allocate_2D_matrix(i,j);
+    V.v_i_j_size = i;
+
+    V.X_v = (int*)malloc(i * sizeof(int));
+    V.X_v_size = 0;
+
+    V.F_D_j = (int*) malloc(i * sizeof(int));
+    V.F_D_j_size = 0;
+
+    //CALCULATION OF v_i_j USING FUNCTION
+    int counter = 0;
+    counter++;
+//        printf("counter = %d\n", counter);
+    V.v_i_j = calculate_v_i_j(D_input_for_V, i, col_number);
+    // printf("j = %d\n", col);
+    int sum = 0;
+    for (int row = 0; row < i; row++) {
+        v_j[row] =  V.v_i_j[row][col_number];
+        //printf("v_j[%d] = %d\n", row, v_j[row]);
+    }
+
+    //CALCULATION OF x_v and F(D(j)
+    //CALCULATING OF #x_v(j)
+    //X_v CALCULATES REPETITION OF THE VALUE v IN SUB-MATRIX D(j) FOR j = 0, 1, 2, ... , n-1
+    V.X_v = calculate_X_v(v_j, i);
+
+    //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j))
+    V.F_D_j[col_number] = calculate_F_D_j(V.X_v, j, col_number);
+//    printf("F_D_j[%d] = %d\n", col_number, V.F_D_j[col_number]);
+    //printf("\n");
+
+    //STEP # 1: FOR D(j) construct a set V = {v = v| v ∈ {0, 1, 2, 3, ..., 2^(j+1)-1} if #{X_v(j) > 2^n-1-j}
+    int v = (1 << (col_number + 1)) - 1;
+    //printf("v = %d\n", v);
+    int index_V = 0;
+    for (int index = 0; index <= v; index++) {
+        //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
+        //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
+        if (V.X_v[index] > (1 << (n - 1 - col_number))) {
+            V.array[index_V++] = index;
+            //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
+            //printf("v = %d\n", index);
+            V.array_size = index_V;
+        }
+        //printf("\n");
+        //sum = X_v[index] + sum;
+    }
+    return V;
+}
+
+//struct D_object calculate_V(int* X_v, int col_number){
+//
+//    struct D_object V;
+//    //CALCULATION OF v_i_j USING FUNCTION
+//    int counter = 0;
+//    counter++;
+//        printf("counter = %d\n", counter);
+//    v_i_j = calculate_v_i_j(D, i, col_number);
+//    // printf("j = %d\n", col);
+//    int sum = 0;
+//    for (int row = 0; row < i; row++) {
+//        v_j[row] = v_i_j[row][col_number];
+//        //printf("v_j[%d] = %d\n", row, v_j[row]);
+//    }
+//
+//    //CALCULATION OF x_v and F(D(j)
+//    //CALCULATING OF #x_v(j)
+//    //X_v CALCULATES REPETITION OF THE VALUE v IN SUB-MATRIX D(j) FOR j = 0, 1, 2, ... , n-1
+//    X_v = calculate_X_v(v_j, i);
+//
+//    //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j))
+//    F_D_j[col_number] = calculate_F_D_j(X_v, j, col_number);
+//    //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
+//    //printf("\n");
+//
+//
+//    //CALCULATION OF V
+//    struct array_object V;
+//    V.array = (int*)malloc(i * sizeof(int));
+//    V.array_size = 0;
+//
+//    //STEP # 1: FOR D(j) construct a set V = {v = v| v ∈ {0, 1, 2, 3, ..., 2^(j+1)-1} if #{X_v(j) > 2^n-1-j}
+//    int v = (1 << (col_number + 1)) - 1;
+//    //printf("v = %d\n", v);
+//    int index_V = 0;
+//    for (int index = 0; index <= v; index++) {
+//        //printf("#{X_v[%d]} = %d\n", index, X_v[index]);
+//        //printf("2^n-1-%d  = %d\n", col, 1 << (n - 1 - col));
+//        if (X_v[index] > (1 << (n - 1 - col_number))) {
+//            V.array[index_V++] = index;
+//            //printf("%d > %d\n", X_v[index], 1 << (n - 1 - col));
+//            //printf("v = %d\n", index);
+//            V.array_size = index_V;
+//        }
+//        //printf("\n");
+//        //sum = X_v[index] + sum;
+//    }
+//    return V;
+//}
+
+
+int** make_D_bijective(int** D_input, int j_index){
     int **f_j = allocate_2D_matrix(i, j);
     int *S_j_omega = (int *) malloc(i * sizeof(int));
     int offset = 0;
@@ -648,12 +745,15 @@ int** make_D_bijective(int** D_input, int col_number){
     int *X_v = (int *) malloc(i * sizeof(int));
     int *updated_X_v = (int *) malloc(i * sizeof(int));
     int *F_D_j = (int *) malloc(j * sizeof(int));
-    int *f = (int *) malloc(i * sizeof(int));
+    int *f_j_i = (int *) malloc(i * sizeof(int));
     int *F_omega = (int *) malloc(16 * sizeof(int));
     int WH_max;
     int *updated_D = (int *) malloc(j * sizeof(int));
     int L_omega;
-    struct array_object V;
+    struct D_object V;
+    int is_bijective_flag;
+
+    printf("Calling bijective function\n");
 
     //GENERATING WALSH HADAMARD MATRIX OF ORDER j
     int **WH = allocate_2D_matrix(j, j);
@@ -666,29 +766,33 @@ int** make_D_bijective(int** D_input, int col_number){
         }
         //printf("\n");
     }
-
+    printf("col_number_inside function = %d\n", j_index);
     //ASSIGNING f_j where f_0 is MSB and f_(j-1) is MSB as represented by the array
-    for (int col = 0; col < col_number; col++) {
+    //WE HAVE TO MAKE D BIJECTIVE FOR EACH col AND MOVE TO THE NEXT col.
+    for (int col = 0; col <= j_index; col++) {
         printf("j = %d\n", col);
         for (int row = 0; row < i; row++) {
-            //CONSTRUCT D(j) FROM FROM THE RANDOM SBOX WHERE j = 0, 1, 2, ..., n-1
-            f[row] = D_input[row][col];
-            printf("Input_D[%d][%d] = %d\n", row, col, D_input[row][col]);
-            printf("f_j[%d][%d] = %d\n", row, col, f_j[row][col]);
-            printf("f[%d] = %d\n", row, f[row]);
+            f_j_i[row] = D_input[row][col];
+//            printf("Input_D[%d][%d] = %d\n", row, col, D_input[row][col]);
+//            printf("f_j[%d][%d] = %d\n", row, col, f_j[row][col]);
+            //printf("f_j_i[%d] = %d\n", row, f_j_i[row]);
         }
 
         //CALCULATION OF v_i_j USING FUNCTION
 
         int counter = 0;
-        Step_one:
         counter++;
-        printf("counter = %d\n", counter);
-        v_i_j = calculate_v_i_j(D, i, col);
+
+        //CALCULATION OF V
+        V = calculate_V(D_input, j_index);
+
+
+        //        printf("counter = %d\n", counter);
+//        v_i_j = calculate_v_i_j(D, i, col);
         // printf("j = %d\n", col);
         int sum = 0;
         for (int row = 0; row < i; row++) {
-            v_j[row] = v_i_j[row][col];
+            v_j[row] = V.v_i_j[row][col];
             //printf("v_j[%d] = %d\n", row, v_j[row]);
         }
 
@@ -698,14 +802,10 @@ int** make_D_bijective(int** D_input, int col_number){
         X_v = calculate_X_v(v_j, i);
 
         //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j))
-        F_D_j[col] = calculate_F_D_j(X_v, j, col);
-        //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
+//        F_D_j[col] = calculate_F_D_j(X_v, j, col);
+        printf("F_D_j[%d] = %d\n", col, V.F_D_j[col]);
+
         //printf("\n");
-
-        V = calculate_V(X_v, col);
-
-        //Calculate V
-
         //Calculate F_D(j-1) and F_F(j)
 
         //printf("index_V = %d\n");
@@ -717,7 +817,7 @@ int** make_D_bijective(int** D_input, int col_number){
         if (V.array_size == 0) {
             printf("D(%d) is bijective\n", col);
             for (int row = 0; row < i; row++) {
-                printf("D[%d][%d] = %d\n", row, col, D[row][col]);
+                //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
             }
             continue; //IF D IS BIJECTIVE FOR j THEN TO GOT
         } else {
@@ -725,7 +825,7 @@ int** make_D_bijective(int** D_input, int col_number){
             printf("Going to Step 3\n", col);
             //STEP # 3. According to the Boolean function f_j in D(j), calculate the sets W^plus_j,1, W^minus_j,1,W^plus_j,2 AND W^minus_j,2.
             //APPLYING WALSH HADAMARD MATRIX ON f_j TO CALCULATE WALSH HADAMARD SPECTRUM OF f_j
-            S_j_omega = matrix_multiplication(f, WH);
+            S_j_omega = matrix_multiplication(f_j_i, WH);
 
             // printf("j = %d\n", col);
             //printf("Walsh-Hadamard transform for f Boolean function:\n");
@@ -750,56 +850,56 @@ int** make_D_bijective(int** D_input, int col_number){
             W_minus_j_3 = calculate_W_minus_3(S_j_omega, i, WH_max);
 
             if (W_plus_j_1.array_size == 0) {
-                printf("W_plus_j_1 is empty\n");
+//                printf("W_plus_j_1 is empty\n");
             } else {
-                printf("W_plus_j_1.array_size = %d\n", W_plus_j_1.array_size);
+//                printf("W_plus_j_1.array_size = %d\n", W_plus_j_1.array_size);
                 for (int index = 0; index < W_plus_j_1.array_size; index++) {
-                    printf("W_plus_j_1[%d] = %d\n", index, W_plus_j_1.array[index]);
+//                    printf("W_plus_j_1[%d] = %d\n", index, W_plus_j_1.array[index]);
                 }
             }
 
             if (W_minus_j_1.array_size == 0) {
-                printf("W_minus_j_1 is empty\n");
+//                printf("W_minus_j_1 is empty\n");
             } else {
-                printf("W_minus_j_1.array_size = %d\n", W_minus_j_1.array_size);
+//                printf("W_minus_j_1.array_size = %d\n", W_minus_j_1.array_size);
                 for (int index = 0; index < W_minus_j_1.array_size; index++) {
-                    printf("W_minus_j_1[%d] = %d\n", index, W_minus_j_1.array[index]);
+//                    printf("W_minus_j_1[%d] = %d\n", index, W_minus_j_1.array[index]);
                 }
             }
 
             if (W_plus_j_2.array_size == 0) {
-                printf("W_plus_j_2 is empty\n");
+//                printf("W_plus_j_2 is empty\n");
             } else {
-                printf("W_plus_j_2.array_size = %d\n", W_plus_j_2.array_size);
+//                printf("W_plus_j_2.array_size = %d\n", W_plus_j_2.array_size);
                 for (int index = 0; index < W_plus_j_2.array_size; index++) {
-                    printf("W_j_2_plus[%d] = %d\n", index, W_plus_j_2.array[index]);
+//                    printf("W_j_2_plus[%d] = %d\n", index, W_plus_j_2.array[index]);
                 }
             }
 
             if (W_minus_j_2.array_size == 0) {
-                printf("W_minus_j_2 is empty\n");
+//                printf("W_minus_j_2 is empty\n");
             } else {
-                printf("W_minus_j_2.array_size = %d\n", W_minus_j_2.array_size);
+//                printf("W_minus_j_2.array_size = %d\n", W_minus_j_2.array_size);
                 for (int index = 0; index < W_minus_j_2.array_size; index++) {
-                    printf("W_j_2_minus[%d] = %d\n", index, W_minus_j_2.array[index]);
+//                    printf("W_j_2_minus[%d] = %d\n", index, W_minus_j_2.array[index]);
                 }
             }
 
             if (W_plus_j_3.array_size == 0) {
-                printf("W_plus_j_3 is empty\n");
+//                printf("W_plus_j_3 is empty\n");
             } else {
-                printf("W_plus_j_3.array_size = %d\n", W_plus_j_3.array_size);
+//                printf("W_plus_j_3.array_size = %d\n", W_plus_j_3.array_size);
                 for (int index = 0; index < W_plus_j_3.array_size; index++) {
-                    printf("W_plus_j_3_[%d] = %d\n", index, W_plus_j_3.array[index]);
+//                    printf("W_plus_j_3_[%d] = %d\n", index, W_plus_j_3.array[index]);
                 }
             }
 
             if (W_minus_j_3.array_size == 0) {
-                printf("W_minus_j_3 is empty\n");
+//                printf("W_minus_j_3 is empty\n");
             } else {
-                printf("W_minus_j_3.array_size = %d\n", W_minus_j_3.array_size);
+//                printf("W_minus_j_3.array_size = %d\n", W_minus_j_3.array_size);
                 for (int index = 0; index < W_minus_j_3.array_size; index++) {
-                    printf("W_j_3_minus[%d] = %d\n", index, W_minus_j_3.array[index]);
+//                    printf("W_j_3_minus[%d] = %d\n", index, W_minus_j_3.array[index]);
                 }
             }
 
@@ -814,20 +914,20 @@ int** make_D_bijective(int** D_input, int col_number){
 
             //printf("W_plus_j_1_2.array_size = %d\n", W_plus_j_1_2.array_size);
             if (W_plus_j_1_2.array_size == 0) {
-                printf("W_plus_j_1_2 is empty\n");
+//                printf("W_plus_j_1_2 is empty\n");
             } else {
                 for (int W_plus_j_1_2_index = 0;
                      W_plus_j_1_2_index < W_plus_j_1_2.array_size; W_plus_j_1_2_index++) {
-                    printf("W_plus_j_1_2[%d] = %d\n", W_plus_j_1_2_index, W_plus_j_1_2.array[W_plus_j_1_2_index]);
+//                    printf("W_plus_j_1_2[%d] = %d\n", W_plus_j_1_2_index, W_plus_j_1_2.array[W_plus_j_1_2_index]);
                 }
             }
 
             if (W_minus_j_1_2.array_size == 0) {
-                printf("W_minus_j_1_2 is empty\n");
+//                printf("W_minus_j_1_2 is empty\n");
             } else {
                 for (int W_minus_j_1_2_index = 0;
                      W_minus_j_1_2_index < W_minus_j_1_2.array_size; W_minus_j_1_2_index++) {
-                    printf("W_minus_j_1_2[%d] = %d\n", W_minus_j_1_2_index, W_minus_j_1_2.array[W_minus_j_1_2_index]);
+//                    printf("W_minus_j_1_2[%d] = %d\n", W_minus_j_1_2_index, W_minus_j_1_2.array[W_minus_j_1_2_index]);
                 }
             }
 
@@ -836,59 +936,66 @@ int** make_D_bijective(int** D_input, int col_number){
             printf("\n");
             int a;
             int is_theorem_3_satisfied_without_omega;
-            int is_theorem_3_satisfied_wit_omega;
+            int is_theorem_3_satisfied_with_omega;
 
-            int match_flag = 0;
+
             // printf("index_v = %d\n", index_v);
             //STEP 4: Set m = 1
             for (int m = 0; m < V.array_size; m++) {
                 //STEP 5: Set a=V(m),here V(m)is the m-th element in V int a;
+                printf("m = %d\n", m);
                 a = V.array[m];
-                //printf("a = %d\n", a);
+//                printf("a = %d\n", a);
                 int count_X_v_1 = 0;
                 //STEP 6: CHECK FOR v_i_j = a and v_i_j satisfies Theorem 3, complement the Boolean function value f_j_i, update and return to Step 1;
                 // Otherwise, go to Step 7.
+                int match_flag = 0;
                 for (int row = 0; row < i; row++) {
-                    if ((a == v_i_j[row][col]) && (match_flag == 0)) { //Checking if we can get v_i_j = a
+//                    printf("v_j_i[%d][%d] = %d\n", row, col, V.v_i_j[row][col]);
+                    if ((a == v_j[row]) && (match_flag == 0)) { //Checking if we can get v_i_j = a
                         match_flag = 1;
-                        printf("rows_with_1 = %d\n", row);
+//                        printf("rows_with_1 = %d\n", row);
                         //CHECK IF v_i_j SATISFY THEOREM 3 WHERE i = row
 
-                        is_theorem_3_satisfied_without_omega = is_satisfy_theorem_3_without_omega(f, row,
+                        is_theorem_3_satisfied_without_omega = is_satisfy_theorem_3_without_omega(f_j_i, row,
                                                                                                   W_plus_j_1_2.array,
                                                                                                   W_minus_j_1_2.array);
-                        printf("is_theorem_3_satisfied_without_omega = %d\n", is_theorem_3_satisfied_without_omega);
+
+//                        printf("is_theorem_3_satisfied_without_omega = %d\n", is_theorem_3_satisfied_without_omega);
                         if (is_theorem_3_satisfied_without_omega == 1) {
-                            printf("Complement f_i_j for row = %d\n", row);
-                            printf("Before complement:f[%d] = %d\n", row, f[row]);
+//                            printf("Theorem 3 is satisfied without omega\n");
+//                            printf("Complement f_i_j for row = %d\n", row);
+//                            printf("Before complement:f[%d] = %d\n", row, f_j_i[row]);
 
                             //COMPLEMENT f_i_j
-                            complement_f_j_i(f[row]);
+                            complement_f_j_i(f_j_i[row]);
 
                             //UPDATE D(j)
-                            D[row][col] = f[row];
-                            printf("After complement:f[%d] = %d\n", row, f[row]);
+                            D[row][col] = f_j_i[row];
+                            D = make_D_bijective(D,col);
+//                            printf("After complement:f[%d] = %d\n", row, f[row]);
                             break;
                         }
                     } else if ((a == v_i_j[row][col]) && (match_flag == 1)) {
                         W_j_1 = calculate_union(W_plus_j_1.array, W_minus_j_1.array, W_plus_j_1.array_size,
                                                 W_minus_j_1.array_size);
 
-                        is_theorem_3_satisfied_wit_omega = is_satisfy_theorem_3_with_omega(f, row, W_plus_j_1_2.array,
+                        is_theorem_3_satisfied_with_omega = is_satisfy_theorem_3_with_omega(f_j_i, row, W_plus_j_1_2.array,
                                                                                            W_minus_j_1_2.array,
                                                                                            W.array);;
-                        printf("is_theorem_3_satisfied_wit_omega = %d\n", is_theorem_3_satisfied_wit_omega);
-                        if (is_theorem_3_satisfied_wit_omega == 1) {
-                            printf("Complement f_i_j for row = %d\n", row);
-                            printf("Before complement:f[%d] = %d\n", row, f[row]);
+//                        printf("is_theorem_3_satisfied_wit_omega = %d\n", is_theorem_3_satisfied_wit_omega);
+                        if (is_theorem_3_satisfied_with_omega == 1) {
+//                            printf("Theorem 3 is satisfied with omega\n");
+//                            printf("Complement f_i_j for row = %d\n", row);
+//                            printf("Before complement:f[%d] = %d\n", row, f[row]);
 
                             //COMPLEMENT f_i_j
-                            complement_f_j_i(f[row]);
+                            complement_f_j_i(f_j_i[row]);
 
                             //UPDATE D(j)
-                            D[row][col] = f[row];
-                            printf("After complement:f[%d] = %d\n", row, f[row]);
-                            goto Step_one;
+                            D[row][col] = f_j_i[row];
+                            D = make_D_bijective(D, col);
+//                            printf("After complement:f[%d] = %d\n", row, f[row]);
                         }
                         //printf("\n");
                         //    printf("W_j_1.array_size = %d\n", W_j_1.array_size);
@@ -906,6 +1013,8 @@ int** make_D_bijective(int** D_input, int col_number){
                         if (count_X_v_1 > (1 << (n - 1 - col))) {
                             D[row][col] = complement_f_j_i(f_j[row][col]);
                         }
+                    }else{
+//                        printf("Theorem 3 is NOT satisfied without omega and moving to Step 8\n");
                     }
 
 
@@ -927,34 +1036,36 @@ int** make_D_bijective(int** D_input, int col_number){
                     //printf("D[%d][%d] = %d\n", row, col, D[row][col]);
                     //printf("\n");
 
+                }//END OF FOR LOOP of row CHECKING WHICH ROW IS EQUAL TO
+                if(m <= V.array_size){
+                    printf("Breaking loop for m\n");
                     break;
                 }
+            }//END OF FOR LOOP OF m
 
-            }//END OF FOR LOOP of row CHECKING WHICH ROW IS EQUAL TO a
-        }//END OF FOR LOOP OF m
-
-        //CALCULATION OF v_i_j USING FUNCTION
-        v_i_j = calculate_v_i_j(D, i, col);
-        // printf("j = %d\n", col);
-//            int sum = 0;
-        for (int row = 0; row < i; row++) {
-            v_j[row] = v_i_j[row][col];
-            //printf("v_j[%d] = %d\n", row, v_j[row]);
+            printf("After breaking m loop\n");
         }
-
-        //CALCULATION OF x_v and F(D(j)
-        //CALCULATING OF #x_v(j)
-        //X_v CALCULATES REPETITION OF THE VALUE v IN SUB-MATRIX D(j) FOR j = 0, 1, 2, ... , n-1
-        X_v = calculate_X_v(v_j, i);
-
-        //CALCULATING BIJECTIVE FITNESS FUNCTION, F(D(j)) AFTER UPDATING D(j)
-        F_D_j[col] = calculate_F_D_j(X_v, j, col);
-        //printf("F_D_j[%d] = %d\n", col, F_D_j[col]);
-        //printf("\n");
-
+//        printf("V[%d] = %d\n", 0, V.array[0]);
     }
     //printf("\n");
     //END OF FOR LOOP COL OF j
     //printf("Updated S-box\n");
     //print_Sbox(D, i, j);
+
+    for(int row = 0; row < i; row++){
+        if(V.array[0] == v_j[row]){
+            f_j_i[row] = complement_f_j_i(f_j_i[row]);
+            D[row][j_index] = f_j_i[row];
+            printf("F_D_j = %d\n", V.F_D_j[0]);
+            if(V.F_D_j[0] != 0){
+                is_bijective_flag = 0;
+                D = make_D_bijective(D, j_index);
+            }else{
+                is_bijective_flag = 1;
+            }
+        }
+    }
+
+    return D;
+
 }
